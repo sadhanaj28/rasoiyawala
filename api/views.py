@@ -59,7 +59,10 @@ def get_area_list(request):
     """
     if request.method == 'GET':
         areas = get_area_list_from_db()
-        area_list_serializer = get_area_list_json(areas)
+        try:
+            area_list_serializer = get_area_list_json(areas)
+        except Exception as e:
+            print('area api @@@@@', e)
         return JsonResponse(area_list_serializer, safe=False)
 
 

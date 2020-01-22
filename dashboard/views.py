@@ -22,16 +22,22 @@ class DashboardView(View):
     def get(self, request, *args, **kwargs):
         page = max(int(request.GET['page']), 1) if "page" in request.GET else 1
         limit = PAGE_SIZE
-
+        cook_list_json_data = []
+        area_list_json = []
         area_list = requests.get(GET_AREA_LIST, params=request.GET)
+        try:
+            area_list_json = area_list.json()
+        except Exception as e:
+            print('area : ', e)
         if 'search_by' in request.GET.keys():
             search_by = request.GET["search_by"]
             cook_list = requests.get(GET_COOK_LIST_API, params=request.GET)
         else:
             cook_list = requests.get(GET_COOK_LIST_API, params=request.GET)
-
-        cook_list_json_data = cook_list.json()['cook']
-
+        try:
+            cook_list_json_data = cook_list.json()['cook']
+        except Exception as e:
+            print('$$$$', e)
         page_details = {
             'page': page,
             'limit': limit,
@@ -40,12 +46,12 @@ class DashboardView(View):
 
         if len(cook_list_json_data) == 0:
             return render(request, 'dashboard.html', context={'cook_list': cook_list_json_data,
-                                                              'area_list': area_list.json(),
+                                                              'area_list': area_list_json,
                                                               'page_details': page_details,
                                                               'message': 'No result'})
         if cook_list.status_code == 200:
             return render(request, 'dashboard.html', context={'cook_list': cook_list_json_data,
-                                                              'area_list': area_list.json(),
+                                                              'area_list': area_list_json,
                                                               'page_details': page_details})
 
     def post(self, request, *args, **kwargs):

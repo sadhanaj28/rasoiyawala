@@ -105,6 +105,48 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(filename)s:%(funcName)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+        'json': {
+            'format': '{"@timestamp":"%(asctime)s","level":"%(levelname)s","name":"%(name)s","filename":"%(filename)s",'
+                      '"funcName":"%(funcName)s","line":"%(lineno)s","message":"%(message)s"}'
+        }
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/cash_dashboard/cash-console.log',
+            'formatter': 'simple' if DEBUG else 'json'
+        },
+        'dashboard': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/cook_dashboard/cook-dashboard.log',
+        },
+    },
+    'loggers': {
+        'dashboard': {
+            'handlers': ['dashboard'],
+            'level': 'DEBUG',
+        },
+        'django': {
+            'handlers': ['console', 'dashboard'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -128,3 +170,13 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+COOK_GET_COOK_LIST_API = 'http://127.0.0.1:8000/api/cook/cooks_list/'
+COOK_GET_AREA_LIST = 'http://127.0.0.1:8000/api/cook/area_list/'
+COOK_CREATE_COOK_API = 'http://127.0.0.1:8000/api/cook/cook_details/'
+COOK_UPLOAD_COOK_IMAGE_API = 'http://127.0.0.1:8000/api/cook/cook_image/'
+
+PAGE_SIZE = 6
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'

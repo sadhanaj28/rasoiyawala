@@ -1,4 +1,6 @@
 from django.db import connection
+import logging
+logger = logging.getLogger(__name__)
 
 COOK_COLUMN_KEYS = ['id', 'name', 'type', 'gender', 'pan_card', 'profile_pic', 'descriptions', 'contact_number_one', 'contact_number_two', 'city',
                     'area', 'north_indian_food', 'south_indian_food', 'chinees_food', 'other', 'food_pic_one', 'food_pic_two']

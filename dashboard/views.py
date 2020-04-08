@@ -9,11 +9,10 @@ from django.conf import settings
 import json
 # import os
 
-PAGE_SIZE = 6
-GET_COOK_LIST_API = 'http://127.0.0.1:8000/api/cook/cooks_list/'
-GET_AREA_LIST = 'http://127.0.0.1:8000/api/cook/area_list/'
-CREATE_COOK_API = 'http://127.0.0.1:8000/api/cook/cook_details/'
-UPLOAD_COOK_IMAGE_API = 'http://127.0.0.1:8000/api/cook/cook_image/'
+GET_COOK_LIST_API = settings.COOK_GET_COOK_LIST_API
+GET_AREA_LIST = settings.COOK_GET_AREA_LIST
+CREATE_COOK_API = settings.COOK_CREATE_COOK_API
+UPLOAD_COOK_IMAGE_API = settings.COOK_UPLOAD_COOK_IMAGE_API
 
 
 @method_decorator(csrf_protect, name='dispatch')
@@ -21,7 +20,7 @@ class DashboardView(View):
 
     def get(self, request, *args, **kwargs):
         page = max(int(request.GET['page']), 1) if "page" in request.GET else 1
-        limit = PAGE_SIZE
+        limit = settings.PAGE_SIZE
 
         area_list = requests.get(GET_AREA_LIST, params=request.GET)
         if 'search_by' in request.GET.keys():

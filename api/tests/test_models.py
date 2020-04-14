@@ -17,8 +17,13 @@ class CookAgreementTest(TestCase):
 
 class CookProfileImageTest(TestCase):
     def setUp(self):
-        UserDetails.objects.create(name="test_cook", type='Cook', gender='Female', pan_card="GFFDRE45", profile_pic="",
-                                   contact_number_one=9876543212, contact_number_two=9876545678,
+        UserDetails.objects.create(name="test_cook",
+                                   type='Cook',
+                                   gender='Female',
+                                   pan_card="GFFDRE45",
+                                   profile_pic="",
+                                   contact_number_one=9876543212,
+                                   contact_number_two=9876545678,
                                    descriptions="hello test address",
                                    is_access_granted="Yes")
         cook = UserDetails.objects.get(pan_card="GFFDRE45")

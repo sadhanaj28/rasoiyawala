@@ -107,47 +107,47 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'formatters': {
-#         'verbose': {
-#             'format': "[%(asctime)s] %(levelname)s [%(name)s:%(filename)s:%(funcName)s:%(lineno)s] %(message)s",
-#             'datefmt': "%d/%b/%Y %H:%M:%S"
-#         },
-#         'simple': {
-#             'format': '%(levelname)s %(message)s'
-#         },
-#         'json': {
-#             'format': '{"@timestamp":"%(asctime)s","level":"%(levelname)s","name":"%(name)s","filename":"%(filename)s",'
-#                       '"funcName":"%(funcName)s","line":"%(lineno)s","message":"%(message)s"}'
-#         }
-#     },
-#     'handlers': {
-#         'console': {
-#             'level': 'DEBUG',
-#             'class': 'logging.FileHandler',
-#             'filename': '/var/log/cash_dashboard/cash-console.log',
-#             'formatter': 'simple' if DEBUG else 'json'
-#         },
-#         'dashboard': {
-#             'level': 'DEBUG',
-#             'class': 'logging.FileHandler',
-#             'filename': '/var/log/cook_dashboard/cook-dashboard.log',
-#         },
-#     },
-#     'loggers': {
-#         'dashboard': {
-#             'handlers': ['dashboard'],
-#             'level': 'DEBUG',
-#         },
-#         'django': {
-#             'handlers': ['console', 'dashboard'],
-#             'level': 'ERROR',
-#             'propagate': True,
-#         },
-#     },
-# }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(filename)s:%(funcName)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+        'json': {
+            'format': '{"@timestamp":"%(asctime)s","level":"%(levelname)s","name":"%(name)s","filename":"%(filename)s",'
+                      '"funcName":"%(funcName)s","line":"%(lineno)s","message":"%(message)s"}'
+        }
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': './log_file/console.log',
+            'formatter': 'simple' if DEBUG else 'json'
+        },
+        'dashboard': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': './log_file/console.log',
+        },
+    },
+    'loggers': {
+        'dashboard': {
+            'handlers': ['dashboard'],
+            'level': 'DEBUG',
+        },
+        'django': {
+            'handlers': ['console', 'dashboard'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
 
 
 # Internationalization

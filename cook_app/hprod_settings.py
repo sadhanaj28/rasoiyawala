@@ -127,24 +127,25 @@ LOGGING = {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': './log_file/console.log',
+            'filename': 'cook_app/log_files/console.log',
             'formatter': 'simple' if DEBUG else 'json'
         },
-        'dashboard': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': './log_file/console.log',
-        },
+        # 'dashboard': {
+        #     'level': 'DEBUG',
+        #     'class': 'logging.FileHandler',
+        #     'filename': './log_file/console.log',
+        # },
     },
     'loggers': {
-        'dashboard': {
-            'handlers': ['dashboard'],
-            'level': 'DEBUG',
-        },
+        # 'dashboard': {
+        #     'handlers': ['dashboard'],
+        #     'level': 'DEBUG',
+            
+        # },
         'django': {
-            'handlers': ['console', 'dashboard'],
+            'handlers': ['console'],
             'level': 'ERROR',
-            'propagate': True,
+            'propagate': False,   
         },
     },
 }

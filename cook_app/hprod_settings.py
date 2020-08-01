@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@3#le)2xi@+zl+2#lb)*0iq=sh*r18n1wz*p=!zb^+o=q^tj71'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'us-cdbr-east-02.cleardb.com', 'cookwalabook.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'cookwalabook.herokuapp.com']
 
 
 # Application definition
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -168,40 +169,41 @@ USE_TZ = True
 # APPEND_SLASH=False
 
 # Local
-# STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
 
-# MEDIA_URL = 'media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # GCS setting for static and media
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'templates'),
-    os.path.join(BASE_DIR, "dashboard", "templates"),
-    os.path.join(BASE_DIR, "dashboard", "static"),
-]
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-GS_BUCKET_NAME = 'cook_static'
-STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-STATIC_URL = 'https://storage.googleapis.com/cook_static/'
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'templates'),
+#     os.path.join(BASE_DIR, "dashboard", "templates"),
+#     os.path.join(BASE_DIR, "dashboard", "static"),
+# ]
+# DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+# GS_BUCKET_NAME = 'cook_static'
+# STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+# STATIC_URL = 'https://storage.googleapis.com/cook_static/'
 
-MEDIA_URL = 'https://storage.googleapis.com/cook_media/'
+# MEDIA_URL = 'https://storage.googleapis.com/cook_media/'
 
-from google.oauth2 import service_account
-GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-    os.path.join(BASE_DIR, 'cook_app/rasoiya-wala-7beec250d22e.json'))
+# from google.oauth2 import service_account
+# GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+#     os.path.join(BASE_DIR, 'cook_app/rasoiya-wala-7beec250d22e.json'))
 
 
 # local
-COOK_GET_COOK_LIST_API = 'http://127.0.0.1:8000/api/cook/cooks_list/'
-COOK_GET_AREA_LIST = 'http://127.0.0.1:8000/api/cook/area_list/'
-COOK_CREATE_COOK_API = 'http://127.0.0.1:8000/api/cook/cook_details/'
-COOK_UPLOAD_COOK_IMAGE_API = 'http://127.0.0.1:8000/api/cook/cook_image/'
+# COOK_GET_COOK_LIST_API = 'http://127.0.0.1:8000/api/cook/cooks_list/'
+# COOK_GET_AREA_LIST = 'http://127.0.0.1:8000/api/cook/area_list/'
+# COOK_CREATE_COOK_API = 'http://127.0.0.1:8000/api/cook/cook_details/'
+# COOK_UPLOAD_COOK_IMAGE_API = 'http://127.0.0.1:8000/api/cook/cook_image/'
 
 # heroku prod
-# COOK_GET_COOK_LIST_API = 'http://cookwalabook.herokuapp.com/api/cook/cooks_list/'
-# COOK_GET_AREA_LIST = 'http://cookwalabook.herokuapp.com/api/cook/area_list/'
-# COOK_CREATE_COOK_API = 'http://cookwalabook.herokuapp.com/api/cook/cook_details/'
-# COOK_UPLOAD_COOK_IMAGE_API = 'http://cookwalabook.herokuapp.com/api/cook/cook_image/'
+COOK_GET_COOK_LIST_API = 'http://cookwalabook.herokuapp.com/api/cook/cooks_list/'
+COOK_GET_AREA_LIST = 'http://cookwalabook.herokuapp.com/api/cook/area_list/'
+COOK_CREATE_COOK_API = 'http://cookwalabook.herokuapp.com/api/cook/cook_details/'
+COOK_UPLOAD_COOK_IMAGE_API = 'http://cookwalabook.herokuapp.com/api/cook/cook_image/'
 
 PAGE_SIZE = 6
 

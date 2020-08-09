@@ -209,3 +209,13 @@ COOK_UPLOAD_COOK_IMAGE_API = 'http://cookwalabook.herokuapp.com/api/cook/cook_im
 PAGE_SIZE = 6
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+
+# COOK_GET_COOK_LIST_API = 'http://127.0.0.1:8000/api/cook/cooks_list/'
+# COOK_GET_AREA_LIST = 'http://127.0.0.1:8000/api/cook/area_list/'
+# COOK_CREATE_COOK_API = 'http://127.0.0.1:8000/api/cook/cook_details/'
+# COOK_UPLOAD_COOK_IMAGE_API = 'http://127.0.0.1:8000/api/cook/cook_image/'
+
+# PAGE_SIZE = 6
+
+# TEST_RUNNER = 'django.test.runner.DiscoverRunner'

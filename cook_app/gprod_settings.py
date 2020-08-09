@@ -26,7 +26,8 @@ SECRET_KEY = '@3#le)2xi@+zl+2#lb)*0iq=sh*r18n1wz*p=!zb^+o=q^tj71'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'us-cdbr-east-02.cleardb.com', 'cookwalabook.herokuapp.com']
+# ALLOWED_HOSTS = ['127.0.0.1', 'us-cdbr-east-02.cleardb.com', 'cookwalabook.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -80,11 +81,13 @@ WSGI_APPLICATION = 'cook_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'heroku_97b608cb8a2bdb0',
-        'USER': 'b426b54596dad4',
-        'PASSWORD': 'f3951f14',
-        'HOST': 'us-cdbr-east-02.cleardb.com',
-        'PORT': '3306',
+        'HOST': '/cloudsql/rasoiya-wala-284114:asia-south1:rasoiya-instance',
+        'USER': 'anjali',
+        'PASSWORD': 'Alaja@8212',
+        'NAME': 'cook_app',
+        # For MySQL, set 'PORT': '3306' instead of the following. Any Cloud
+        # SQL Proxy instances running locally must also be set to tcp:3306.
+        'PORT': '5432',
     }
 }
 

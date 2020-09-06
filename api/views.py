@@ -187,7 +187,11 @@ class CookView(APIView):
         return Response({"success": success_message, 'error_message': '', "Cook_id": cook_id})
 
 
+
 class CookImageView(APIView):
+    """
+    this view used for get the images and save the images.
+    """
     def post(self, request):
         # logger.info("request for adding cook's profile image")
         try:

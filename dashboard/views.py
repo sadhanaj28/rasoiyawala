@@ -24,13 +24,13 @@ class DashboardView(View):
         page = max(int(request.GET['page']), 1) if "page" in request.GET else 1
         limit = settings.PAGE_SIZE
 
-        area_list = requests.get(GET_AREA_LIST, params=request.GET)
+        area_list = requests.get(GET_AREA_LIST, params=request.GET, verify=False)
         sleep(2)
         if 'search_by' in request.GET.keys():
             search_by = request.GET["search_by"]
-            cook_list = requests.get(GET_COOK_LIST_API, params=request.GET)
+            cook_list = requests.get(GET_COOK_LIST_API, params=request.GET, verify=False)
         else:
-            cook_list = requests.get(GET_COOK_LIST_API, params=request.GET)
+            cook_list = requests.get(GET_COOK_LIST_API, params=request.GET, verify=False)
 
         cook_list_json_data = cook_list.json()['cook']
 
@@ -52,7 +52,7 @@ class DashboardView(View):
 
     def post(self, request, *args, **kwargs):
         search_by = request.POST["search_by"]
-        r = requests.get(GET_COOK_LIST_API, params={'search_by': search_by})
+        r = requests.get(GET_COOK_LIST_API, params={'search_by': search_by}, verify=False)
         if r.status_code == 200:
             return render(request, 'dashboard.html', context={'cook_list': r.json()['cook']})
 
@@ -61,7 +61,7 @@ class DashboardView(View):
 class AddCookView(View):
 
     def get(self, request, *args, **kwargs):
-        area_list = requests.get(GET_AREA_LIST, params=request.GET)
+        area_list = requests.get(GET_AREA_LIST, params=request.GET, verify=False)
 
         return render(request, 'add_cook.html', context={'area_list': area_list.json()})
 
@@ -95,7 +95,7 @@ class AddCookView(View):
 
         headers = {"content-type": "application/json"}
         json_data = json.dumps(data)
-        location_list = requests.get(GET_AREA_LIST, params=request.GET)
+        location_list = requests.get(GET_AREA_LIST, params=request.GET, verify=False)
         try:
             response_data = requests.post(
                                         CREATE_COOK_API,

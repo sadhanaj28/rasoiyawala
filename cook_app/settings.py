@@ -174,10 +174,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # local
-COOK_GET_COOK_LIST_API = 'http://128.199.20.89:8000/api/cook/cooks_list/'
-COOK_GET_AREA_LIST = 'http://128.199.20.89:8000/api/cook/area_list/'
-COOK_CREATE_COOK_API = 'http://128.199.20.89:8000/api/cook/cook_details/'
-COOK_UPLOAD_COOK_IMAGE_API = 'http://128.199.20.89:8000/api/cook/cook_image/'
+COOK_GET_COOK_LIST_API = 'http://128.199.20.89/api/cook/cooks_list/'
+COOK_GET_AREA_LIST = 'http://128.199.20.89/api/cook/area_list/'
+COOK_CREATE_COOK_API = 'http://128.199.20.89/api/cook/cook_details/'
+COOK_UPLOAD_COOK_IMAGE_API = 'http://128.199.20.89/api/cook/cook_image/'
 
 
 PAGE_SIZE = 6

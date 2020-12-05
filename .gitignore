@@ -13,7 +13,9 @@ __pycache__/
 
 # Environments
 .env
+.cenv
 .venv
+cenv/
 env/
 venv/
 ENV/

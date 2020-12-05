@@ -10,11 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-#------------------- gcloud settings---------------------
-
 import os
-from django.db.backends.mysql.base import DatabaseWrapper
-DatabaseWrapper.data_types['DateTimeField'] = 'datetime'
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,8 +24,8 @@ SECRET_KEY = '@3#le)2xi@+zl+2#lb)*0iq=sh*r18n1wz*p=!zb^+o=q^tj71'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['127.0.0.1', 'cookwalabook.herokuapp.com']
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -46,7 +43,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -82,13 +78,11 @@ WSGI_APPLICATION = 'cook_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': '/cloudsql/rasoiya-wala-284114:asia-south1:rasoiya-instance',
-        'USER': 'anjali',
-        'PASSWORD': 'Alaja@8212',
-        'NAME': 'cook_app',
-        # For MySQL, set 'PORT': '3306' instead of the following. Any Cloud
-        # SQL Proxy instances running locally must also be set to tcp:3306.
-        'PORT': '5432',
+        'NAME': 'db_cookdukan',
+        'USER': 'cookdukan',
+        'PASSWORD': 'Cookdukan@8212',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
@@ -128,20 +122,29 @@ AUTH_PASSWORD_VALIDATORS = [
 #         }
 #     },
 #     'handlers': {
-#         'console': {
+#         # 'console': {
+#         #     'level': 'DEBUG',
+#         #     'class': 'logging.FileHandler',
+#         #     'filename': '/var/log/cook_dukan_log/cash-console.log',
+#         #     'formatter': 'simple' if DEBUG else 'json'
+#         # },
+#         'dashboard': {
 #             'level': 'DEBUG',
 #             'class': 'logging.FileHandler',
-#             'filename': 'cook_app/log_files/console.log',
-#             'formatter': 'simple' if DEBUG else 'json'
+#             'filename': '/var/log/cook_dukan_log/cook-dashboard.log',
 #         },
 #     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['console'],
-#             'level': 'ERROR',
-#             'propagate': False,   
-#         },
-#     },
+#     # 'loggers': {
+#     #     'dashboard': {
+#     #         'handlers': ['dashboard'],
+#     #         'level': 'DEBUG',
+#     #     },
+#     #     'django': {
+#     #         'handlers': [ 'dashboard'],
+#     #         'level': 'ERROR',
+#     #         # 'propagate': True,
+#     #     },
+#     # },
 # }
 
 
@@ -161,31 +164,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-# APPEND_SLASH=False
 
-# Local
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+# APPEND_SLASH=False
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# GCS setting for static and media
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'templates'),
-#     os.path.join(BASE_DIR, "dashboard", "templates"),
-#     os.path.join(BASE_DIR, "dashboard", "static"),
-# ]
-# DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-# GS_BUCKET_NAME = 'cook_static'
-# STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-# STATIC_URL = 'https://storage.googleapis.com/cook_static/'
-
-# MEDIA_URL = 'https://storage.googleapis.com/cook_media/'
-
-# from google.oauth2 import service_account
-# GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-#     os.path.join(BASE_DIR, 'cook_app/rasoiya-wala-7beec250d22e.json'))
 
 
 # local
@@ -194,22 +178,7 @@ COOK_GET_AREA_LIST = 'http://127.0.0.1:8000/api/cook/area_list/'
 COOK_CREATE_COOK_API = 'http://127.0.0.1:8000/api/cook/cook_details/'
 COOK_UPLOAD_COOK_IMAGE_API = 'http://127.0.0.1:8000/api/cook/cook_image/'
 
-# gcloud prod
-# COOK_GET_COOK_LIST_API = 'http://cookwalabook.herokuapp.com/api/cook/cooks_list/'
-# COOK_GET_AREA_LIST = 'http://cookwalabook.herokuapp.com/api/cook/area_list/'
-# COOK_CREATE_COOK_API = 'http://cookwalabook.herokuapp.com/api/cook/cook_details/'
-# COOK_UPLOAD_COOK_IMAGE_API = 'http://cookwalabook.herokuapp.com/api/cook/cook_image/'
 
 PAGE_SIZE = 6
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
-
-
-# COOK_GET_COOK_LIST_API = 'http://127.0.0.1:8000/api/cook/cooks_list/'
-# COOK_GET_AREA_LIST = 'http://127.0.0.1:8000/api/cook/area_list/'
-# COOK_CREATE_COOK_API = 'http://127.0.0.1:8000/api/cook/cook_details/'
-# COOK_UPLOAD_COOK_IMAGE_API = 'http://127.0.0.1:8000/api/cook/cook_image/'
-
-# PAGE_SIZE = 6
-
-# TEST_RUNNER = 'django.test.runner.DiscoverRunner'

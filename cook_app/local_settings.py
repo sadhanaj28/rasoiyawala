@@ -78,9 +78,9 @@ WSGI_APPLICATION = 'cook_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cook_app',
+        'NAME': 'db_cookdukan',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'Sadhana@8212#',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }

@@ -28,7 +28,7 @@ class DashboardView(View):
             cook_list = requests.get(GET_COOK_LIST_API, params=request.GET)
         else:
             cook_list = requests.get(GET_COOK_LIST_API, params=request.GET)
-
+        print("!!!!!!!!!!!!!!!!!\n",cook_list )
         cook_list_json_data = cook_list.json()['cook']
 
         page_details = {

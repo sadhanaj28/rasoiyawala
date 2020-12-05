@@ -79,8 +79,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'db_cookdukan',
-        'USER': 'cookdukan',
-        'PASSWORD': 'Cookdukan@8212',
+        'USER': 'cookowner',
+        'PASSWORD': 'Alaja@8212#',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }

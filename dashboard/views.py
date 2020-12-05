@@ -1,13 +1,15 @@
+import json
+import requests
+from time import sleep
+
 # from django.http import Http404
 from django.shortcuts import render
-# from django.template import RequestContext
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import View
-import requests
+
 from django.conf import settings
-import json
-# import os
+
 
 GET_COOK_LIST_API = settings.COOK_GET_COOK_LIST_API
 GET_AREA_LIST = settings.COOK_GET_AREA_LIST
@@ -23,12 +25,13 @@ class DashboardView(View):
         limit = settings.PAGE_SIZE
 
         area_list = requests.get(GET_AREA_LIST, params=request.GET)
+        sleep(2)
         if 'search_by' in request.GET.keys():
             search_by = request.GET["search_by"]
             cook_list = requests.get(GET_COOK_LIST_API, params=request.GET)
         else:
             cook_list = requests.get(GET_COOK_LIST_API, params=request.GET)
-        print("!!!!!!!!!!!!!!!!!\n",cook_list )
+
         cook_list_json_data = cook_list.json()['cook']
 
         page_details = {
@@ -36,7 +39,7 @@ class DashboardView(View):
             'limit': limit,
             'count': len(cook_list_json_data)
         }
-
+        sleep(5)
         if len(cook_list_json_data) == 0:
             return render(request, 'dashboard.html', context={'cook_list': cook_list_json_data,
                                                               'area_list': area_list.json(),

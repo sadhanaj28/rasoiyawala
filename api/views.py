@@ -1,9 +1,12 @@
+from time import sleep
+
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
+
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.validators import ValidationError
-from django.shortcuts import get_object_or_404
 
 from .custom_serializers import get_json_obj, get_area_list_json
 from .utils import get_cook_using_area, get_cook_using_user_name, get_cook_list, get_area_list_from_db
@@ -29,7 +32,7 @@ def cook_list(request):
         page_number = request.GET.get('page', None)
         name = request.GET.get('search_by', None)
         area = request.GET.get('area', None)
-
+        
         if name is not None:
             # logger.info('Information get_cook_using_user_name!')
             cooks = get_cook_using_user_name(name, PAGE_LIMIT, page_number)
@@ -39,7 +42,7 @@ def cook_list(request):
         else:
             # logger.info('Information get_cook_list!')
             cooks = get_cook_list(PAGE_LIMIT, page_number)
-
+        sleep(5)
         custom_serializer = get_json_obj(cooks)
         return JsonResponse(custom_serializer, safe=False)
 
@@ -53,6 +56,7 @@ def get_area_list(request):
     if request.method == 'GET':
         areas = get_area_list_from_db()
         area_list_serializer = get_area_list_json(areas)
+        sleep(5)
         return JsonResponse(area_list_serializer, safe=False)
 
 
@@ -60,6 +64,7 @@ class CookView(APIView):
 
     def mapping_location_with_user(self, location_list, cook_id):
         # logger.info('mapping location with cook')
+        sleep(2)
         for location in location_list:
             area = location['area']
             if len(Location.objects.filter(area=area)):
@@ -76,6 +81,7 @@ class CookView(APIView):
 
     def create_specification(self, specification_list, cook_id):
         # logger.info('creating specification for cook')
+        sleep(2)
         specification_details = specification_list[0]
         north_indian_food = specification_details['north_indian_food']
         south_indian_food = specification_details['south_indian_food']
@@ -99,6 +105,7 @@ class CookView(APIView):
     def update_cook_personal_info(self, cook_details):
         # updating cook personal info
         # logger.info('update existing cook details')
+        sleep(2)
         personal_details = cook_details.get('personal_details')
         cook_id = personal_details['id']
         saved_cook = get_object_or_404(UserDetails.objects.all(), id=cook_id)
@@ -110,6 +117,7 @@ class CookView(APIView):
         return True
 
     def update_cook_location_info(self, cook_id, cook_details):
+        sleep(2)
         exist_locations = CookLocationMapping.objects.filter(cook_id=cook_id)
         for loc in exist_locations:
             loc.delete()
@@ -122,6 +130,7 @@ class CookView(APIView):
         return True
 
     def update_cook_specifications_info(self, cook_id, cook_details):
+        sleep(2)
         exist_specifications = get_object_or_404(CookSpecilityMapping.objects.all(), cook_id=cook_id)
         exist_specifications.delete()
         specification_list = cook_details.get('specification')
@@ -133,6 +142,7 @@ class CookView(APIView):
         return True
 
     def create_cook_details(self, cook_details):
+        sleep(2)
         personal_details = cook_details.get('personal_details')
         success_msg = ''
         error_msg = ''
@@ -160,12 +170,14 @@ class CookView(APIView):
         return cook_id, success_msg, error_msg
 
     def get(self, request):
+        sleep(2)
         users = UserDetails.objects.all()
         serializer = CookSerializer(users, many=True)
         # logger.info('fetch cook details list')
         return Response(serializer.data)
 
     def post(self, request):
+        sleep(2)
         cook_details = request.data
         cook_id = ''
         try:
@@ -190,6 +202,7 @@ class CookImageView(APIView):
     this view used for get the images and save the images.
     """
     def post(self, request):
+        sleep(2)
         # logger.info("request for adding cook's profile image")
         try:
             data = request.data

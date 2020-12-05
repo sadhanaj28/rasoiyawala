@@ -1,6 +1,8 @@
 import json
 import requests
 from time import sleep
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 # from django.http import Http404
 from django.shortcuts import render
@@ -24,13 +26,19 @@ class DashboardView(View):
         page = max(int(request.GET['page']), 1) if "page" in request.GET else 1
         limit = settings.PAGE_SIZE
 
-        area_list = requests.get(GET_AREA_LIST, params=request.GET, verify=False)
+        session = requests.Session()
+        retry = Retry(connect=3, backoff_factor=0.5)
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
+
+        area_list = session.get(GET_AREA_LIST, params=request.GET)
         sleep(2)
         if 'search_by' in request.GET.keys():
             search_by = request.GET["search_by"]
-            cook_list = requests.get(GET_COOK_LIST_API, params=request.GET, verify=False)
+            cook_list = session.get(GET_COOK_LIST_API, params=request.GET)
         else:
-            cook_list = requests.get(GET_COOK_LIST_API, params=request.GET, verify=False)
+            cook_list = session.get(GET_COOK_LIST_API, params=request.GET)
 
         cook_list_json_data = cook_list.json()['cook']
 

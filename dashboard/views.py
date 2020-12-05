@@ -32,13 +32,13 @@ class DashboardView(View):
         session.mount('http://', adapter)
         session.mount('https://', adapter)
 
-        area_list = session.get(GET_AREA_LIST, params=request.GET)
+        area_list = session.get(GET_AREA_LIST, params=request.GET,timeout=30)
         sleep(2)
         if 'search_by' in request.GET.keys():
             search_by = request.GET["search_by"]
-            cook_list = session.get(GET_COOK_LIST_API, params=request.GET)
+            cook_list = session.get(GET_COOK_LIST_API, params=request.GET,timeout=30)
         else:
-            cook_list = session.get(GET_COOK_LIST_API, params=request.GET)
+            cook_list = session.get(GET_COOK_LIST_API, params=request.GET,timeout=30)
 
         cook_list_json_data = cook_list.json()['cook']
 

@@ -139,7 +139,6 @@ class CookView(APIView):
         cook_id = ''
         try:
             serializer = UserDetailsSerializer(data=personal_details)
-
             if serializer.is_valid(raise_exception=True):
                 cook_saved = serializer.save()
                 cook_id = cook_saved.id
@@ -177,17 +176,19 @@ class CookView(APIView):
                 self.update_cook_location_info(cook_id, cook_details)
                 self.update_cook_specifications_info(cook_id, cook_details)
                 success_message = 'successfully updated'
-
             else:
                 # logger.info('request for creating cook')
                 cook_id, success_message, error_message = self.create_cook_details(cook_details)
         except Exception as e:
             return Response({"success": '', 'error_message': e, "Cook_id": cook_id})
-
         return Response({"success": success_message, 'error_message': '', "Cook_id": cook_id})
 
 
+
 class CookImageView(APIView):
+    """
+    this view used for get the images and save the images.
+    """
     def post(self, request):
         # logger.info("request for adding cook's profile image")
         try:

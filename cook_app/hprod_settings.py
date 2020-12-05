@@ -130,18 +130,8 @@ LOGGING = {
             'filename': 'cook_app/log_files/console.log',
             'formatter': 'simple' if DEBUG else 'json'
         },
-        # 'dashboard': {
-        #     'level': 'DEBUG',
-        #     'class': 'logging.FileHandler',
-        #     'filename': './log_file/console.log',
-        # },
     },
     'loggers': {
-        # 'dashboard': {
-        #     'handlers': ['dashboard'],
-        #     'level': 'DEBUG',
-            
-        # },
         'django': {
             'handlers': ['console'],
             'level': 'ERROR',
@@ -176,23 +166,6 @@ STATIC_URL = '/static/'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# GCS setting for static and media
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'templates'),
-#     os.path.join(BASE_DIR, "dashboard", "templates"),
-#     os.path.join(BASE_DIR, "dashboard", "static"),
-# ]
-# DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-# GS_BUCKET_NAME = 'cook_static'
-# STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-# STATIC_URL = 'https://storage.googleapis.com/cook_static/'
-
-# MEDIA_URL = 'https://storage.googleapis.com/cook_media/'
-
-# from google.oauth2 import service_account
-# GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-#     os.path.join(BASE_DIR, 'cook_app/rasoiya-wala-7beec250d22e.json'))
-
 
 # local
 # COOK_GET_COOK_LIST_API = 'http://127.0.0.1:8000/api/cook/cooks_list/'
@@ -209,13 +182,3 @@ COOK_UPLOAD_COOK_IMAGE_API = 'http://cookwalabook.herokuapp.com/api/cook/cook_im
 PAGE_SIZE = 6
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
-
-
-# COOK_GET_COOK_LIST_API = 'http://127.0.0.1:8000/api/cook/cooks_list/'
-# COOK_GET_AREA_LIST = 'http://127.0.0.1:8000/api/cook/area_list/'
-# COOK_CREATE_COOK_API = 'http://127.0.0.1:8000/api/cook/cook_details/'
-# COOK_UPLOAD_COOK_IMAGE_API = 'http://127.0.0.1:8000/api/cook/cook_image/'
-
-# PAGE_SIZE = 6
-
-# TEST_RUNNER = 'django.test.runner.DiscoverRunner'

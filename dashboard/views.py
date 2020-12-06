@@ -25,43 +25,42 @@ class DashboardView(View):
     def get(self, request, *args, **kwargs):
         page = max(int(request.GET['page']), 1) if "page" in request.GET else 1
         limit = settings.PAGE_SIZE
-
-        # session = requests.Session()
-        # retry = Retry(connect=3, backoff_factor=0.5)
-        # adapter = HTTPAdapter(max_retries=retry)
-        # session.mount('http://', adapter)
-        # session.mount('https://', adapter)
-        try:
-            area_list = requests.get(GET_AREA_LIST, params=request.GET,timeout=120)
-            sleep(2)
-            if 'search_by' in request.GET.keys():
-                search_by = request.GET["search_by"]
-                cook_list = requests.get(GET_COOK_LIST_API, params=request.GET,timeout=120)
-            else:
-                cook_list = requests.get(GET_COOK_LIST_API, params=request.GET,timeout=120)
-
-            cook_list_json_data = cook_list.json()['cook']
-
-            page_details = {
-                'page': page,
-                'limit': limit,
-                'count': len(cook_list_json_data)
-            }
-            sleep(5)
-            if len(cook_list_json_data) == 0:
-                return render(request, 'dashboard.html', context={'cook_list': cook_list_json_data,
-                                                                'area_list': area_list.json(),
-                                                                'page_details': page_details,
-                                                                'message': 'No result'})
-            if cook_list.status_code == 200:
-                return render(request, 'dashboard.html', context={'cook_list': cook_list_json_data,
-                                                                'area_list': area_list.json(),
-                                                                'page_details': page_details})
-        except Exception as e:
-            return render(request, 'dashboard.html', context={'cook_list': {},
+        return render(request, 'dashboard.html', context={'cook_list': {},
                                                                 'area_list': {},
                                                                 'page_details': {},
                                                                 'message': 'No result'})
+
+        # try:
+        #     area_list = requests.get(GET_AREA_LIST, params=request.GET,timeout=120)
+        #     sleep(2)
+        #     if 'search_by' in request.GET.keys():
+        #         search_by = request.GET["search_by"]
+        #         cook_list = requests.get(GET_COOK_LIST_API, params=request.GET,timeout=120)
+        #     else:
+        #         cook_list = requests.get(GET_COOK_LIST_API, params=request.GET,timeout=120)
+
+        #     cook_list_json_data = cook_list.json()['cook']
+
+        #     page_details = {
+        #         'page': page,
+        #         'limit': limit,
+        #         'count': len(cook_list_json_data)
+        #     }
+        #     sleep(5)
+        #     if len(cook_list_json_data) == 0:
+        #         return render(request, 'dashboard.html', context={'cook_list': cook_list_json_data,
+        #                                                         'area_list': area_list.json(),
+        #                                                         'page_details': page_details,
+        #                                                         'message': 'No result'})
+        #     if cook_list.status_code == 200:
+        #         return render(request, 'dashboard.html', context={'cook_list': cook_list_json_data,
+        #                                                         'area_list': area_list.json(),
+        #                                                         'page_details': page_details})
+        # except Exception as e:
+            # return render(request, 'dashboard.html', context={'cook_list': {},
+            #                                                     'area_list': {},
+            #                                                     'page_details': {},
+            #                                                     'message': 'No result'})
 
     def post(self, request, *args, **kwargs):
         search_by = request.POST["search_by"]

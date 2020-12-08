@@ -9,14 +9,15 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import View
-
 from django.conf import settings
 
+from api import views as backend_view 
 
-GET_COOK_LIST_API = settings.COOK_GET_COOK_LIST_API
-GET_AREA_LIST = settings.COOK_GET_AREA_LIST
-CREATE_COOK_API = settings.COOK_CREATE_COOK_API
-UPLOAD_COOK_IMAGE_API = settings.COOK_UPLOAD_COOK_IMAGE_API
+
+# GET_COOK_LIST_API = settings.COOK_GET_COOK_LIST_API
+# GET_AREA_LIST = settings.COOK_GET_AREA_LIST
+# CREATE_COOK_API = settings.COOK_CREATE_COOK_API
+# UPLOAD_COOK_IMAGE_API = settings.COOK_UPLOAD_COOK_IMAGE_API
 
 
 @method_decorator(csrf_protect, name='dispatch')
@@ -25,57 +26,56 @@ class DashboardView(View):
     def get(self, request, *args, **kwargs):
         page = max(int(request.GET['page']), 1) if "page" in request.GET else 1
         limit = settings.PAGE_SIZE
-        return render(request, 'dashboard.html', context={'cook_list': {},
-                                                                'area_list': {},
+
+        data = {}
+        if 'search_by' in request.GET.keys():
+            data["search_by"] = request.GET["search_by"]
+        if 'page' in request.GET.keys():
+            data["page"] = request.GET["page"]
+        if 'area' in request.GET.keys():
+            data["area"] = request.GET["area"]
+        try:
+            print(data)
+            area_list = backend_view.get_area_list() #requests.get(GET_AREA_LIST, params=request.GET,timeout=120)
+
+            cook_list = backend_view.cook_list(data)
+
+            page_details = {
+                'page': page,
+                'limit': limit,
+                'count': len(cook_list)
+            }
+            print("cook - ", cook_list, "\n !!!!!!!!!!!!\n", area_list)
+            if len(cook_list) == 0:
+                return render(request, 'dashboard.html', context={'cook_list': cook_list,
+                                                                'area_list': area_list,
+                                                                'page_details': page_details,
+                                                                'message': 'No result'})
+
+            return render(request, 'dashboard.html', context={'cook_list': cook_list,
+                                                                'area_list': area_list,
+                                                                'page_details': page_details})
+        except Exception as e:
+
+            return render(request, 'dashboard.html', context={'cook_list': [],
+                                                                'area_list': [],
                                                                 'page_details': {},
                                                                 'message': 'No result'})
 
-        # try:
-        #     area_list = requests.get(GET_AREA_LIST, params=request.GET,timeout=120)
-        #     sleep(2)
-        #     if 'search_by' in request.GET.keys():
-        #         search_by = request.GET["search_by"]
-        #         cook_list = requests.get(GET_COOK_LIST_API, params=request.GET,timeout=120)
-        #     else:
-        #         cook_list = requests.get(GET_COOK_LIST_API, params=request.GET,timeout=120)
-
-        #     cook_list_json_data = cook_list.json()['cook']
-
-        #     page_details = {
-        #         'page': page,
-        #         'limit': limit,
-        #         'count': len(cook_list_json_data)
-        #     }
-        #     sleep(5)
-        #     if len(cook_list_json_data) == 0:
-        #         return render(request, 'dashboard.html', context={'cook_list': cook_list_json_data,
-        #                                                         'area_list': area_list.json(),
-        #                                                         'page_details': page_details,
-        #                                                         'message': 'No result'})
-        #     if cook_list.status_code == 200:
-        #         return render(request, 'dashboard.html', context={'cook_list': cook_list_json_data,
-        #                                                         'area_list': area_list.json(),
-        #                                                         'page_details': page_details})
-        # except Exception as e:
-            # return render(request, 'dashboard.html', context={'cook_list': {},
-            #                                                     'area_list': {},
-            #                                                     'page_details': {},
-            #                                                     'message': 'No result'})
-
     def post(self, request, *args, **kwargs):
         search_by = request.POST["search_by"]
-        r = requests.get(GET_COOK_LIST_API, params={'search_by': search_by}, verify=False)
-        if r.status_code == 200:
-            return render(request, 'dashboard.html', context={'cook_list': r.json()['cook']})
+        cook_list = backend_view.cook_list() # requests.get(GET_COOK_LIST_API, params={'search_by': search_by}, verify=False)
+        # if r.status_code == 200:
+        return render(request, 'dashboard.html', context={'cook_list': cook_list})
 
 
 @method_decorator(csrf_protect, name='dispatch')
 class AddCookView(View):
 
     def get(self, request, *args, **kwargs):
-        area_list = requests.get(GET_AREA_LIST, params=request.GET, verify=False)
+        area_list = backend_view.get_area_list() #requests.get(GET_AREA_LIST, params=request.GET, verify=False)
 
-        return render(request, 'add_cook.html', context={'area_list': area_list.json()})
+        return render(request, 'add_cook.html', context={'area_list': area_list})
 
     def post(self, request, *args, **kwargs):
         agreement= request.POST.get('terms')
@@ -107,30 +107,33 @@ class AddCookView(View):
 
         headers = {"content-type": "application/json"}
         json_data = json.dumps(data)
-        location_list = requests.get(GET_AREA_LIST, params=request.GET, verify=False)
+        location_list = backend_view.get_area_list() # requests.get(GET_AREA_LIST, params=request.GET, verify=False)
         try:
-            response_data = requests.post(
-                                        CREATE_COOK_API,
-                                        data=json_data,
-                                        headers=headers
-                                        )
-            cook_json_data = json.loads(response_data.text)
+            # response_data = requests.post(
+            #                             CREATE_COOK_API,
+            #                             data=json_data,
+            #                             headers=headers
+            #                             )
+            response_data = backend_view.CookView.post(data)
+            cook_json_data = response_data #json.loads(response_data.text)
 
             if cook_json_data['error_message'] != '':
                 return render(request, 'add_cook.html',
                               context={'error_message': cook_json_data['error_message'],
-                                       'area_list': location_list.json()})
+                                       'area_list': location_list})
 
             cook_id = cook_json_data['Cook_id']
             img = request.FILES['profile_photo']
             ext = img.name.split('.')[-1]
             name = img.name.split('.')[0]
             img.name = 'C_' + str(cook_id) + '_' + name + '.' + ext
-            img_response_data = requests.post(
-                                            UPLOAD_COOK_IMAGE_API,
-                                            data=json.dumps({'cook_id': cook_id, 'profile_pic': img.name}),
-                                            headers=headers
-                                            )
+            # img_response_data = requests.post(
+            #                                 UPLOAD_COOK_IMAGE_API,
+            #                                 data=json.dumps({'cook_id': cook_id, 'profile_pic': img.name}),
+            #                                 headers=headers
+            #                                 )
+
+            img_response_data = backend_view.CookImage.post({'cook_id': cook_id, 'profile_pic': img.name})
             user_folder = settings.MEDIA_ROOT+'/images'
 
 
@@ -141,5 +144,5 @@ class AddCookView(View):
 
         except Exception as e:
             print('@@@@ ## ', e)
-            return render(request, 'add_cook.html', context={'error_message': 'Server down, please try after sometimes ', 'area_list': location_list.json()})
-        return render(request, 'add_cook.html', context={'message': 'successfully created', 'area_list': location_list.json()})
+            return render(request, 'add_cook.html', context={'error_message': 'Server down, please try after sometimes ', 'area_list': location_list})
+        return render(request, 'add_cook.html', context={'message': 'successfully created', 'area_list': location_list})

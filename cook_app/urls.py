@@ -29,7 +29,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    url(r'^api/cook/', include('api.urls')),
+    # url(r'^api/cook/', include('api.urls')),
     url(r'^cook/', include('dashboard.urls')),
 ]
 

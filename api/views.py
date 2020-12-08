@@ -1,12 +1,12 @@
-from time import sleep
+# from time import sleep
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.validators import ValidationError
+# from rest_framework.response import Response
+# from rest_framework.views import APIView
+# from rest_framework.validators import ValidationError
 
 from .custom_serializers import get_json_obj, get_area_list_json
 from .utils import get_cook_using_area, get_cook_using_user_name, get_cook_list, get_area_list_from_db
@@ -24,15 +24,15 @@ from .serializers import CookSerializer, \
 PAGE_LIMIT = 6
 # Create your views here.
 @csrf_exempt
-def cook_list(request):
+def cook_list(data={}):
     """
     List all code snippets, or create a new snippet.
     """
-    if request.method == 'GET':
-        page_number = request.GET.get('page', None)
-        name = request.GET.get('search_by', None)
-        area = request.GET.get('area', None)
-        
+    if data.keys() != []:
+        page_number = data.get('page', None)
+        name = data.get('search_by', None)
+        area = data.get('area', None)
+
         if name is not None:
             # logger.info('Information get_cook_using_user_name!')
             cooks = get_cook_using_user_name(name, PAGE_LIMIT, page_number)
@@ -42,29 +42,28 @@ def cook_list(request):
         else:
             # logger.info('Information get_cook_list!')
             cooks = get_cook_list(PAGE_LIMIT, page_number)
-        sleep(5)
-        custom_serializer = get_json_obj(cooks)
-        return JsonResponse(custom_serializer, safe=False)
+
+        # custom_serializer = get_json_obj(cooks)
+        return cooks
 
 
 # Create your views here.
 @csrf_exempt
-def get_area_list(request):
+def get_area_list():
     """
     List all code snippets, or create a new snippet.
     """
-    if request.method == 'GET':
-        areas = get_area_list_from_db()
-        area_list_serializer = get_area_list_json(areas)
-        sleep(5)
-        return JsonResponse(area_list_serializer, safe=False)
+    areas = get_area_list_from_db()
+    area_list_serializer = get_area_list_json(areas)
+    return area_list_serializer
 
 
-class CookView(APIView):
+class CookView:
 
-    def mapping_location_with_user(self, location_list, cook_id):
+    @classmethod
+    def mapping_location_with_user(cls, location_list, cook_id):
         # logger.info('mapping location with cook')
-        sleep(2)
+
         for location in location_list:
             area = location['area']
             if len(Location.objects.filter(area=area)):
@@ -79,9 +78,10 @@ class CookView(APIView):
                 return False
         return True
 
-    def create_specification(self, specification_list, cook_id):
+    @classmethod
+    def create_specification(cls, specification_list, cook_id):
         # logger.info('creating specification for cook')
-        sleep(2)
+
         specification_details = specification_list[0]
         north_indian_food = specification_details['north_indian_food']
         south_indian_food = specification_details['south_indian_food']
@@ -102,7 +102,8 @@ class CookView(APIView):
             return False
         return True
 
-    def update_cook_personal_info(self, cook_details):
+    @classmethod
+    def update_cook_personal_info(cls, cook_details):
         # updating cook personal info
         # logger.info('update existing cook details')
         sleep(2)
@@ -116,33 +117,34 @@ class CookView(APIView):
             # logger.info('successfully updated existing cook personal details')
         return True
 
-    def update_cook_location_info(self, cook_id, cook_details):
+    @classmethod
+    def update_cook_location_info(cls, cook_id, cook_details):
         sleep(2)
         exist_locations = CookLocationMapping.objects.filter(cook_id=cook_id)
         for loc in exist_locations:
             loc.delete()
         location_list = cook_details.get('location')
-        loc_result = self.mapping_location_with_user(location_list, cook_id)
+        loc_result = CookView.mapping_location_with_user(location_list, cook_id)
         if loc_result is False:
             error_msg = 'error while updating cook location'
             # logger.error(error_msg)
             return cook_id, '', error_msg
         return True
 
-    def update_cook_specifications_info(self, cook_id, cook_details):
-        sleep(2)
+    @classmethod
+    def update_cook_specifications_info(cls, cook_id, cook_details):
         exist_specifications = get_object_or_404(CookSpecilityMapping.objects.all(), cook_id=cook_id)
         exist_specifications.delete()
         specification_list = cook_details.get('specification')
-        spc_result = self.create_specification(specification_list, cook_id)
+        spc_result = CookView.create_specification(specification_list, cook_id)
         if spc_result is False:
             error_msg = 'error while updating cook specifications'
             # logger.error(error_msg)
             return cook_id, '', error_msg
         return True
 
-    def create_cook_details(self, cook_details):
-        sleep(2)
+    @classmethod
+    def create_cook_details(cls, cook_details):
         personal_details = cook_details.get('personal_details')
         success_msg = ''
         error_msg = ''
@@ -154,10 +156,10 @@ class CookView(APIView):
                 cook_id = cook_saved.id
 
             location_list = cook_details.get('location')
-            self.mapping_location_with_user(location_list, cook_id)
+            CookView.mapping_location_with_user(location_list, cook_id)
 
             specification_list = cook_details.get('specification')
-            self.create_specification(specification_list, cook_id)
+            CookView.create_specification(specification_list, cook_id)
 
         except ValidationError as v:
             error_msg = 'This cook is already exist in application ' if 'pan_card' in v.detail else 'please enter valid inputs'
@@ -169,49 +171,50 @@ class CookView(APIView):
         # logger.info('successfully created cook')
         return cook_id, success_msg, error_msg
 
-    def get(self, request):
-        sleep(2)
+    @classmethod
+    def get(cls):
         users = UserDetails.objects.all()
         serializer = CookSerializer(users, many=True)
         # logger.info('fetch cook details list')
-        return Response(serializer.data)
+        return serializer.data
 
-    def post(self, request):
-        sleep(2)
-        cook_details = request.data
+    @classmethod
+    def post(cls, data):
+        cook_details = data
         cook_id = ''
         try:
             if 'id' in cook_details.get('personal_details').keys():
                 # logger.info('request for updating cook {}', cook_details.get('personal_details')['id'])
                 cook_id = cook_details.get('personal_details')['id']
-                self.update_cook_personal_info(cook_details)
-                self.update_cook_location_info(cook_id, cook_details)
-                self.update_cook_specifications_info(cook_id, cook_details)
+                CookView.update_cook_personal_info(cook_details)
+                CookView.update_cook_location_info(cook_id, cook_details)
+                CookView.update_cook_specifications_info(cook_id, cook_details)
                 success_message = 'successfully updated'
             else:
                 # logger.info('request for creating cook')
-                cook_id, success_message, error_message = self.create_cook_details(cook_details)
+                cook_id, success_message, error_message = CookView.create_cook_details(cook_details)
         except Exception as e:
-            return Response({"success": '', 'error_message': e, "Cook_id": cook_id})
-        return Response({"success": success_message, 'error_message': '', "Cook_id": cook_id})
+            return {"success": '', 'error_message': e, "Cook_id": cook_id}
+        return {"success": success_message, 'error_message': '', "Cook_id": cook_id}
 
 
 
-class CookImageView(APIView):
+class CookImage:
     """
     this view used for get the images and save the images.
     """
-    def post(self, request):
-        sleep(2)
+
+    @classmethod
+    def post(cls, data):
+
         # logger.info("request for adding cook's profile image")
         try:
-            data = request.data
             serializer = CookProfileImageSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
                 cook_saved = serializer.save()
                 # logger.info("{} created successfully", cook_saved.id)
         except Exception as e:
             # logger.error('exception while adding cook image: ', e)
-            return Response({"Error": "server down"})
-        return Response({"success": "created successfully"})
+            return {"Error": "server down"}
+        return {"success": "created successfully"}
 

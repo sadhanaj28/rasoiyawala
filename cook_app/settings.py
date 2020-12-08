@@ -24,7 +24,7 @@ SECRET_KEY = '@3#le)2xi@+zl+2#lb)*0iq=sh*r18n1wz*p=!zb^+o=q^tj71'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['http://www.cookdukan.com/','128.199.20.89', '127.0.0.1']
+ALLOWED_HOSTS = ['www.cookdukan.com','128.199.20.89', '127.0.0.1']
 
 
 # Application definition

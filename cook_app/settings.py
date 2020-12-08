@@ -24,7 +24,7 @@ SECRET_KEY = '@3#le)2xi@+zl+2#lb)*0iq=sh*r18n1wz*p=!zb^+o=q^tj71'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['http://www.cookdukan.com/','128.199.20.89']
+ALLOWED_HOSTS = ['http://www.cookdukan.com/','128.199.20.89', '127.0.0.1']
 
 
 # Application definition
@@ -174,10 +174,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # local
-COOK_GET_COOK_LIST_API = 'http://128.199.20.89/api/cook/cooks_list/'
-COOK_GET_AREA_LIST = 'http://128.199.20.89/api/cook/area_list/'
-COOK_CREATE_COOK_API = 'http://128.199.20.89/api/cook/cook_details/'
-COOK_UPLOAD_COOK_IMAGE_API = 'http://128.199.20.89/api/cook/cook_image/'
+# COOK_GET_COOK_LIST_API = 'http://128.199.20.89/api/cook/cooks_list/'
+# COOK_GET_AREA_LIST = 'http://128.199.20.89/api/cook/area_list/'
+# COOK_CREATE_COOK_API = 'http://128.199.20.89/api/cook/cook_details/'
+# COOK_UPLOAD_COOK_IMAGE_API = 'http://128.199.20.89/api/cook/cook_image/'
 
 
 PAGE_SIZE = 6

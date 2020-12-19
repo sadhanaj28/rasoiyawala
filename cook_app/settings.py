@@ -24,7 +24,7 @@ SECRET_KEY = '@3#le)2xi@+zl+2#lb)*0iq=sh*r18n1wz*p=!zb^+o=q^tj71'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.cookdukan.com','128.199.20.89', 'www.cookdukan.com']
+ALLOWED_HOSTS = ['.cookdukan.com','128.199.20.89', 'www.cookdukan.com', '127.0.0.1']
 
 
 # Application definition
@@ -79,8 +79,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'db_cookdukan',
-        'USER': 'cookowner',
-        'PASSWORD': 'Alaja@8212#',
+        'USER': 'cookdukan',
+        'PASSWORD': 'Cookdukan@8212',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }

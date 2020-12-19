@@ -2,7 +2,7 @@
 {% load static %}
 <html lang="en">
 <head>
-  <title>Cook Dashboard</title>
+  <title>CookDukan</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -12,7 +12,8 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 
-<body style="background-image: url({% static 'images/cook_dashboard.jpeg' %}); background-repeat: no-repeat;
+<body style=" 
+    background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;">
 
@@ -22,7 +23,7 @@
       <a class="navbar-brand" href="{% url 'dashboard_url' %}" style="color: gold; font-size: x-large;">HOME</a>
     </div>
 
-    <form class="navbar-form navbar-left" action="/cook/dashboard/" method="GET">
+    <form class="navbar-form navbar-left" action="{% url 'dashboard_url' %}" method="GET">
       {% csrf_token %}
       <div class="form-group">
         <input type="text" class="form-control" placeholder="Search by name" name="search_by" value="">
@@ -31,22 +32,25 @@
     </form>
 
     <ul>
-      <li><a href="/cook/add_cook/" class="add-me-button"><span class="glyphicon glyphicon-user"></span>Add me as Cook</a></li>
+      <li><a href="/add_cook/" class="add-me-button"><span class="glyphicon glyphicon-user"></span>Add me as Cook</a></li>
     </ul>
   </div>
 </nav>
-<div class="container"><p style="color: white;">helloooooo</p></div>
+<div class="container">
+  <!-- <p style="color: black;">Community that brings Cooks and Users together!</p> -->
+  <h1>Community that brings all Bangalore's Cooks at one single place!</h1>
+</div>
 
-<div class="container" style="background-color: rgb(111, 88, 84);">
+<div class="container" style="background-color: rgb(145, 118, 83);">
 
   {% block content %}{% endblock %}
 </div>
 
-<div style="height: 50px;"></div>
-<div class="footer" style="background-color: black; height: 50px;">
-</div>
+
 <!-- Footer -->
-<footer class="container-fluid bg-4 text-center">
+<footer class="container-fluid bg-4 text-center" style="
+margin-top: 100px; clear: both;
+position: relative;">
   <p>Bootstrap Theme Made By <a href="https://www.w3schools.com">www.w3schools.com</a></p>
 </footer>
 </body>

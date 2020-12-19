@@ -12,7 +12,7 @@
   <p class="alert alert-danger" id="error_message">{{ error_message }}</p>
   {% endif %}
 
-  <form name="addCookForm" action="/cook/add_cook/" method="POST" enctype="multipart/form-data">
+  <form name="addCookForm" action="/add_cook/" method="POST" enctype="multipart/form-data">
       {% csrf_token %}
       <h3>Personal Details</h3>
     <div class="row">

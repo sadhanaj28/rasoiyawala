@@ -6,7 +6,7 @@
   <div>
     <h2 style="color: white; float:left;">Cooks in your city</h2>
 
-    <form action="/cook/dashboard/" method="GET" style="color: black; float:right; margin-top: 27px; display: inline-flex;">
+    <form action="/dashboard/" method="GET" style="color: black; float:right; margin-top: 27px; display: inline-flex;">
       <select name="area" >
         <option value="default">Sort by: Area</option>
         {% for area in area_list %}
@@ -24,7 +24,6 @@
   <hr style="margin-top: 70px; margin-bottom: auto;">
   <ul class="w3-ul w3-card-4">
     {% for cook in cook_list %}
-<!--        {{ cook.id }}-->
     <li class="w3-bar">
     <div>
       <img src="/media/images/{{cook.profile_pic}}" class="w3-bar-item w3-circle w3-hide-small" style="width:130px">

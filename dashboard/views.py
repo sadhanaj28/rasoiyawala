@@ -4,7 +4,6 @@ from time import sleep
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
-# from django.http import Http404
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
@@ -12,12 +11,6 @@ from django.views.generic import View
 from django.conf import settings
 
 from api import views as backend_view 
-
-
-# GET_COOK_LIST_API = settings.COOK_GET_COOK_LIST_API
-# GET_AREA_LIST = settings.COOK_GET_AREA_LIST
-# CREATE_COOK_API = settings.COOK_CREATE_COOK_API
-# UPLOAD_COOK_IMAGE_API = settings.COOK_UPLOAD_COOK_IMAGE_API
 
 
 @method_decorator(csrf_protect, name='dispatch')
@@ -35,9 +28,7 @@ class DashboardView(View):
         if 'area' in request.GET.keys():
             data["area"] = request.GET["area"]
         try:
-            print(data)
-            area_list = backend_view.get_area_list() #requests.get(GET_AREA_LIST, params=request.GET,timeout=120)
-
+            area_list = backend_view.get_area_list() 
             cook_list = backend_view.cook_list(data)
 
             page_details = {
@@ -45,7 +36,7 @@ class DashboardView(View):
                 'limit': limit,
                 'count': len(cook_list)
             }
-            print("cook - ", cook_list, "\n !!!!!!!!!!!!\n", area_list)
+            
             if len(cook_list) == 0:
                 return render(request, 'dashboard.html', context={'cook_list': cook_list,
                                                                 'area_list': area_list,
@@ -56,7 +47,7 @@ class DashboardView(View):
                                                                 'area_list': area_list,
                                                                 'page_details': page_details})
         except Exception as e:
-
+            print(e)
             return render(request, 'dashboard.html', context={'cook_list': [],
                                                                 'area_list': [],
                                                                 'page_details': {},
@@ -64,8 +55,8 @@ class DashboardView(View):
 
     def post(self, request, *args, **kwargs):
         search_by = request.POST["search_by"]
-        cook_list = backend_view.cook_list() # requests.get(GET_COOK_LIST_API, params={'search_by': search_by}, verify=False)
-        # if r.status_code == 200:
+        cook_list = backend_view.cook_list() 
+
         return render(request, 'dashboard.html', context={'cook_list': cook_list})
 
 
@@ -73,13 +64,13 @@ class DashboardView(View):
 class AddCookView(View):
 
     def get(self, request, *args, **kwargs):
-        area_list = backend_view.get_area_list() #requests.get(GET_AREA_LIST, params=request.GET, verify=False)
+        area_list = backend_view.get_area_list() 
 
         return render(request, 'add_cook.html', context={'area_list': area_list})
 
     def post(self, request, *args, **kwargs):
         agreement= request.POST.get('terms')
-        print('agreement: ',agreement )
+        
         personal_details = {'name': request.POST.get('firstname'),
                             'type': 'Cook',
                             'gender': request.POST.get('gender'),
@@ -107,13 +98,8 @@ class AddCookView(View):
 
         headers = {"content-type": "application/json"}
         json_data = json.dumps(data)
-        location_list = backend_view.get_area_list() # requests.get(GET_AREA_LIST, params=request.GET, verify=False)
+        location_list = backend_view.get_area_list() 
         try:
-            # response_data = requests.post(
-            #                             CREATE_COOK_API,
-            #                             data=json_data,
-            #                             headers=headers
-            #                             )
             response_data = backend_view.CookView.post(data)
             cook_json_data = response_data #json.loads(response_data.text)
 
@@ -127,11 +113,6 @@ class AddCookView(View):
             ext = img.name.split('.')[-1]
             name = img.name.split('.')[0]
             img.name = 'C_' + str(cook_id) + '_' + name + '.' + ext
-            # img_response_data = requests.post(
-            #                                 UPLOAD_COOK_IMAGE_API,
-            #                                 data=json.dumps({'cook_id': cook_id, 'profile_pic': img.name}),
-            #                                 headers=headers
-            #                                 )
 
             img_response_data = backend_view.CookImage.post({'cook_id': cook_id, 'profile_pic': img.name})
             user_folder = settings.MEDIA_ROOT+'/images'
@@ -143,6 +124,6 @@ class AddCookView(View):
                 actual_file.write(img.read())
 
         except Exception as e:
-            print('@@@@ ## ', e)
+            print(e)
             return render(request, 'add_cook.html', context={'error_message': 'Server down, please try after sometimes ', 'area_list': location_list})
         return render(request, 'add_cook.html', context={'message': 'successfully created', 'area_list': location_list})

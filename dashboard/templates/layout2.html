@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'css/styles.css'%}">
+    <title>CookDukan</title>
+</head>
+
+<body>
+
+  <nav class="navbar background h-nav-resp">
+    <ul class="nav-list v-class-resp">
+        <div class="logo"><img src="img/index.jpeg" alt="logo"></div>
+        <li> <a href="{% url 'home_url' %}">Home</a> </li>
+        <li> <a href="{% url 'cooklist_url' %}">CookList</a> </li>
+        <li> <a href="/add_cook/">Register As Cook</a> </li>
+        <li> <a href="{% url 'home_url' %}">Contact Us</a> </li>
+    </ul>
+    <div class="rightNav v-class-resp">
+      <form action="{% url 'cooklist_url' %}" method="GET">
+        {% csrf_token %}
+        <input type="text" name="search_by" id="search">
+        <button type="submit" class="btn btn-sm"> Search</button>
+      </form>
+    </div>
+    <div class="burger">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+  </nav>
+
+
+  {% block content %}{% endblock %}
+
+
+
+<footer class="background">
+  <p class="text-footer">Copyright &copy; 2027 www.cookdukan.com - All rights reserved</p>
+</footer>
+<script src="{%static 'js/resp.js'%}"></script> 
+</body>
+</html>

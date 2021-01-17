@@ -13,8 +13,13 @@ from django.conf import settings
 from api import views as backend_view 
 
 
+class HomeView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'home.html', context={})
+
+
 @method_decorator(csrf_protect, name='dispatch')
-class DashboardView(View):
+class CookListView(View):
 
     def get(self, request, *args, **kwargs):
         page = max(int(request.GET['page']), 1) if "page" in request.GET else 1
@@ -38,17 +43,17 @@ class DashboardView(View):
             }
             
             if len(cook_list) == 0:
-                return render(request, 'dashboard.html', context={'cook_list': cook_list,
+                return render(request, 'cooklist.html', context={'cook_list': cook_list,
                                                                 'area_list': area_list,
                                                                 'page_details': page_details,
                                                                 'message': 'No result'})
 
-            return render(request, 'dashboard.html', context={'cook_list': cook_list,
+            return render(request, 'cooklist.html', context={'cook_list': cook_list,
                                                                 'area_list': area_list,
                                                                 'page_details': page_details})
         except Exception as e:
             print(e)
-            return render(request, 'dashboard.html', context={'cook_list': [],
+            return render(request, 'cooklist.html', context={'cook_list': [],
                                                                 'area_list': [],
                                                                 'page_details': {},
                                                                 'message': 'No result'})
@@ -57,7 +62,7 @@ class DashboardView(View):
         search_by = request.POST["search_by"]
         cook_list = backend_view.cook_list() 
 
-        return render(request, 'dashboard.html', context={'cook_list': cook_list})
+        return render(request, 'cooklist.html', context={'cook_list': cook_list})
 
 
 @method_decorator(csrf_protect, name='dispatch')
@@ -66,7 +71,7 @@ class AddCookView(View):
     def get(self, request, *args, **kwargs):
         area_list = backend_view.get_area_list() 
 
-        return render(request, 'add_cook.html', context={'area_list': area_list})
+        return render(request, 'registration.html', context={'area_list': area_list})
 
     def post(self, request, *args, **kwargs):
         agreement= request.POST.get('terms')

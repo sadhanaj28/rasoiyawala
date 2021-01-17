@@ -1,0 +1,75 @@
+{% extends 'layout2.html' %}
+{% load paginator_templatetags %}
+{% load static %}
+
+{% block content %}
+
+<section class="section">
+  <dev class="thumbnail">
+      <p class="sectionTag text-big">Cooks in your area</p>
+  </dev>
+  <div class="paras"> 
+    <form action="/cooklist/" method="GET">
+      <select name="area" class="drop-down">
+        <option value="default">Sort by: Area</option>
+        {% for area in area_list %}
+        <option value="{{ area }}">{{ area }}</option>
+        {% endfor %}
+      </select>
+      <input type="submit" value="Filter" class="btn btn-dark">
+    </form>
+  </div>
+</section>
+
+<section class="section">
+  {% if message %}
+    <p class="alert alert-success" id="success_message">{{ message }}</p>
+  {% endif %}
+
+    <hr style="margin-top: 70px; margin-bottom: auto;">
+</section>
+
+  <ul>
+    {% for cook in cook_list %}
+    <li>
+      <section class="section">
+        <div class="paras">
+            <p class="sectionTag text-big">Name: {{ cook.name }}</p><br>
+            <p class="sectionSubTag text-small">Gender:  {{ cook.gender }} </p><br>
+            <p class="sectionSubTag text-small">Primary Contact number:  {{ cook.contact_number_one }}</p><br>
+            <p class="sectionSubTag text-small">Secondary Contact number:  {{ cook.contact_number_two }}</p><br>
+            <p class="sectionSubTag text-small">North Indian Food:  {{ cook.north_indian_food }}</p><br>
+            <p class="sectionSubTag text-small">South Indian Food:  {{ cook.south_indian_food }}</p><br>
+            <p class="sectionSubTag text-small">Chinees Food:  {{ cook.chinees_food }}</p><br>
+            <p class="sectionSubTag text-small">{{ cook.descriptions }}</p><br>
+            {% for area in cook.area %}
+            <p class="sectionSubTag text-small">Area: {{ area }}</p><br>
+            {% endfor %}
+        </div>
+        <dev class="thumbnail">
+            <img src="/media/images/{{cook.profile_pic}}" alt="laptop image" class="imgFluid">
+        </dev>
+      </section>
+  </li>
+  {% endfor %}
+</ul>
+
+
+<section class="contact" id="contact">
+  <div style="float: right; padding-top:10px;">
+    {% if page_details.page >= 0 %}
+        <div style="display: inline-block;">
+            <a href="?{% url_replace request 'page' page_details.page|add:-1 %}"
+               class="btn btn-warning" role="button">Back</a>
+        </div>
+    {% endif %}
+    {% if  page_details.count ==  page_details.limit %}
+        <div style="display: inline-block;">
+            <a href="?{% url_replace request 'page' page_details.page|add:1 %}"
+               class="btn btn-warning" role="button">Next</a>
+        </div>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

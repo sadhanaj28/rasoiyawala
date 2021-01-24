@@ -71,30 +71,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cook_app.wsgi.application'
 
-DATABASES={}
-
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.getenv("DB_LOCAL_NAME"),
-            'USER': os.getenv("DB_LOCAL_USER"),
-            'PASSWORD': os.getenv("DB_LOCAL_PASSWORD"),
-            'HOST': os.getenv("DB_LOCAL_HOST"),
-            'PORT': '3306',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv("DB_PROD_NAME"),
+        'USER': os.getenv("DB_PROD_USER"),
+        'PASSWORD': os.getenv("DB_PROD_PASSWORD"),
+        'HOST': os.getenv("DB_PROD_HOST"),
+        'PORT': '3306',
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.getenv("DB_PROD_NAME"),
-            'USER': os.getenv("DB_PROD_USER"),
-            'PASSWORD': os.getenv("DB_PROD_PASSWORD"),
-            'HOST': os.getenv("DB_PROD_HOST"),
-            'PORT': '3306',
-        }
-    }
+}
 
 
 AUTH_PASSWORD_VALIDATORS = [

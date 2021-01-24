@@ -2,56 +2,46 @@
 {% load static %}
 <html lang="en">
 <head>
-  <title>CookDukan</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{%static 'css/style.css'%}">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static '/css/style.css'%}">
+    <title>CookDukan</title>
 </head>
 
-<body style=" 
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;">
+<body>
 
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="{% url 'dashboard_url' %}" style="color: gold; font-size: x-large;">HOME</a>
-    </div>
-
-    <form class="navbar-form navbar-left" action="{% url 'dashboard_url' %}" method="GET">
-      {% csrf_token %}
-      <div class="form-group">
-        <input type="text" class="form-control" placeholder="Search by name" name="search_by" value="">
-      </div>
-      <input type="submit" class="btn btn-warning"/>
-    </form>
-
-    <ul>
-      <li><a href="/add_cook/" class="add-me-button"><span class="glyphicon glyphicon-user"></span>Add me as Cook</a></li>
+  <nav class="navbar background h-nav-resp">
+    <ul class="nav-list v-class-resp">
+        <div class="logo"><img src="/media/images/index.jpeg" alt="logo"></div>
+        <li> <a href="{% url 'home_url' %}">Home</a> </li>
+        <li> <a href="{% url 'cooklist_url' %}">CookList</a> </li>
+        <li> <a href="/add_cook/">Register As Cook</a> </li>
+        <li> <a href="{% url 'home_url' %}">Contact Us</a> </li>
     </ul>
-  </div>
-</nav>
-<div class="container">
-  <!-- <p style="color: black;">Community that brings Cooks and Users together!</p> -->
-  <h1>Community that brings all Bangalore's Cooks at one single place!</h1>
-</div>
+    <div class="rightNav v-class-resp">
+      <form action="{% url 'cooklist_url' %}" method="GET">
+        {% csrf_token %}
+        <input type="text" name="search_by" id="search">
+        <button type="submit" class="btn btn-sm"> Search</button>
+      </form>
+    </div>
+    <div class="burger">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+  </nav>
 
-<div class="container" style="background-color: rgb(145, 118, 83);">
 
-  {% block content %}{% endblock %}
-</div>
+  {% block content %}
+  
+  {% endblock %}
 
 
-<!-- Footer -->
-<footer class="container-fluid bg-4 text-center" style="
-margin-top: 100px; clear: both;
-position: relative;">
-  <p>Bootstrap Theme Made By <a href="https://www.w3schools.com">www.w3schools.com</a></p>
+
+<footer class="background">
+  <p class="text-footer">Copyright &copy; 2027 www.cookdukan.com - All rights reserved</p>
 </footer>
+<script src="{%static '/js/resp.js'%}"></script> 
 </body>
 </html>

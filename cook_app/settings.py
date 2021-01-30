@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['.cookdukan.com','128.199.20.89', 'www.cookdukan.com', '127.0.0.1']
 
@@ -72,15 +72,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'cook_app.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv("DB_PROD_NAME"),
-        'USER': os.getenv("DB_PROD_USER"),
-        'PASSWORD': os.getenv("DB_PROD_PASSWORD"),
-        'HOST': os.getenv("DB_PROD_HOST"),
-        'PORT': '3306',
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv("DB_LOCAL_NAME"),
+            'USER': os.getenv("DB_LOCAL_USER"),
+            'PASSWORD': os.getenv("DB_LOCAL_PASSWORD"),
+            'HOST': os.getenv("DB_LOCAL_HOST"),
+            'PORT': '3306',
+        }
     }
-}
 
 
 AUTH_PASSWORD_VALIDATORS = [

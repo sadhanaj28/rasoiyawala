@@ -33,7 +33,30 @@ def cook_list(data={}):
         else:
             
             cooks = get_cook_list(PAGE_LIMIT, page_number)
-        return cooks
+
+        dataList = []
+        cook_dict = {}
+        for cook in cooks:
+            isMatch = False
+            for data in dataList:
+                if (data is None or data == {}):
+                    isMatch = False
+                    break
+                if cook['id'] == data['id']:
+                    isMatch = True
+                    if isinstance(cook['area'], list):
+                        for ca in cook['area']:
+                            data['area'].append(ca)
+                    else:
+                        data['area'].append(cook['area'])
+
+            if not isMatch: 
+                area = []
+                area.append(cook['area'])
+                cook['area'] = area  
+                dataList.append(cook)
+                
+        return dataList
 
 
 # Create your views here.
@@ -158,7 +181,11 @@ class CookView:
     def post(cls, data):
         cook_details = data
         cook_id = ''
+        
         try:
+            # if UserDetails.objects.get(pan_card=cook_details.get('personal_details')['pan_card']):
+            #     return {"success": '', 'error_message': 'pancard is already exist.', "Cook_id": cook_id}
+            
             if 'id' in cook_details.get('personal_details').keys():
                 cook_id = cook_details.get('personal_details')['id']
                 CookView.update_cook_personal_info(cook_details)

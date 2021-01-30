@@ -76,7 +76,7 @@ class AddCookView(View):
     def post(self, request, *args, **kwargs):
         agreement= request.POST.get('terms')
         
-        personal_details = {'name': request.POST.get('firstname'),
+        personal_details = {'name': request.POST.get('name'),
                             'type': 'Cook',
                             'gender': request.POST.get('gender'),
                             'pan_card': request.POST.get('pancard'),
@@ -86,6 +86,7 @@ class AddCookView(View):
                             'descriptions': request.POST.get('description'),
                             'is_access_granted': request.POST.get('terms'),
                             }
+
         area_list = request.POST.getlist('area')
         location = list()
         for area in area_list:
@@ -107,10 +108,10 @@ class AddCookView(View):
         try:
             response_data = backend_view.CookView.post(data)
             cook_json_data = response_data #json.loads(response_data.text)
-
+            
             if cook_json_data['error_message'] != '':
-                return render(request, 'add_cook.html',
-                              context={'error_message': cook_json_data['error_message'],
+                return render(request, 'registration.html',
+                              context={'error_message': 'Invalid Card Number/Mobile Number, use unique PanCard and 10 digit mobile no',
                                        'area_list': location_list})
 
             cook_id = cook_json_data['Cook_id']
@@ -130,5 +131,5 @@ class AddCookView(View):
 
         except Exception as e:
             print(e)
-            return render(request, 'add_cook.html', context={'error_message': 'Server down, please try after sometimes ', 'area_list': location_list})
-        return render(request, 'add_cook.html', context={'message': 'successfully created', 'area_list': location_list})
+            return render(request, 'registration.html', context={'error_message': 'Server down, please try after sometimes ', 'area_list': location_list})
+        return render(request, 'registration.html', context={'message': 'successfully created', 'area_list': location_list})

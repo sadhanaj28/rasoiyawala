@@ -9,11 +9,11 @@
       <p class="sectionTag text-big">Cooks in your area</p>
   </dev>
   <div class="paras"> 
-    <form action="/cooklist/" method="GET">
+    <form action="{% url 'cooklist_url' %}" method="GET">
       <select name="area" class="drop-down">
         <option value="default">Sort by: Area</option>
         {% for area in area_list %}
-        <option value="{{ area }}">{{ area }}</option>
+          <option value="{{ area }}">{{ area }}</option>
         {% endfor %}
       </select>
       <input type="submit" value="Filter" class="btn btn-dark">

@@ -25,7 +25,7 @@ def get_cook_list(limit=None, page_number=None):
                             LEFT JOIN `cook_specility_mapping` csm ON pd.id = csm.cook_id \
                             LEFT JOIN `specility` s ON s.id = csm.specility_id\
                             LEFT JOIN `cook_profile_image` cpimg ON cpimg.cook_id = pd.id\
-                            GROUP BY pd.id ORDER BY pd.name LIMIT %s;", [limit])
+                            ORDER BY pd.name LIMIT %s;", [limit])
         else:
             offset = get_offset(page_number, limit)
             cursor.execute("SELECT pd.`id`, pd.`name`, pd.`type`, pd.`gender`, pd.`pan_card`, cpimg.`profile_pic`, pd.`descriptions`, pd.`contact_number_one`,\
@@ -36,7 +36,7 @@ def get_cook_list(limit=None, page_number=None):
                                         LEFT JOIN `cook_specility_mapping` csm ON pd.id = csm.cook_id \
                                         LEFT JOIN `cook_profile_image` cpimg ON cpimg.cook_id = pd.id\
                                         LEFT JOIN `specility` s ON s.id = csm.specility_id \
-                                        GROUP BY pd.id ORDER BY pd.name LIMIT %s OFFSET %s;", (limit, offset))
+                                        ORDER BY pd.name LIMIT %s OFFSET %s;", (limit, offset))
         result = cursor.fetchall()
         response = [dict(zip(COOK_COLUMN_KEYS, row)) for row in result]
     return response
@@ -53,7 +53,7 @@ def get_cook_using_area(area, limit=None, page_number=None):
                         LEFT JOIN `cook_specility_mapping` csm ON pd.`id` = csm.`cook_id` \
                         LEFT JOIN `specility` s ON s.id = csm.`specility_id` \
                         LEFT JOIN `cook_profile_image` cpimg ON cpimg.cook_id = pd.id\
-                        WHERE ld.`area` = %s GROUP BY pd.id ORDER BY pd.name LIMIT %s; ", [area, limit])
+                        WHERE ld.`area` = %s ORDER BY pd.name LIMIT %s; ", [area, limit])
         else:
             offset = get_offset(page_number, limit)
             cursor.execute("SELECT pd.`id`, pd.`name`, pd.`type`, pd.`gender`, pd.`pan_card`, cpimg.`profile_pic`, pd.`descriptions`, pd.`contact_number_one`,\
@@ -64,7 +64,7 @@ def get_cook_using_area(area, limit=None, page_number=None):
                                     LEFT JOIN `cook_specility_mapping` csm ON pd.`id` = csm.`cook_id` \
                                     LEFT JOIN `specility` s ON s.id = csm.`specility_id` \
                                     LEFT JOIN `cook_profile_image` cpimg ON cpimg.cook_id = pd.id\
-                                    WHERE ld.`area` = %s GROUP BY pd.id ORDER BY pd.name LIMIT %s OFFSET %s; ", [area, limit, offset])
+                                    WHERE ld.`area` = %s ORDER BY pd.name LIMIT %s OFFSET %s; ", [area, limit, offset])
 
         result = cursor.fetchall()
         response = [dict(zip(COOK_COLUMN_KEYS, row)) for row in result]
@@ -81,7 +81,7 @@ def get_cook_using_user_name(name, limit=None, page_number=None):
                         LEFT JOIN `cook_specility_mapping` csm ON pd.id = csm.cook_id \
                         LEFT JOIN `specility` s ON s.id = csm.specility_id \
                         LEFT JOIN `cook_profile_image` cpimg ON cpimg.cook_id = pd.id\
-                        WHERE pd.`name` = %s GROUP BY pd.id ORDER BY pd.name LIMIT %s; ", [name, limit])
+                        WHERE pd.`name` = %s ORDER BY pd.name LIMIT %s; ", [name, limit])
         else:
             offset = get_offset(page_number, limit)
             cursor.execute("SELECT pd.`id`, pd.`name`, pd.`type`, pd.`gender`, pd.`pan_card`, cpimg.`profile_pic`, pd.`descriptions`, pd.`contact_number_one`,\
@@ -92,7 +92,7 @@ def get_cook_using_user_name(name, limit=None, page_number=None):
                                     LEFT JOIN `cook_specility_mapping` csm ON pd.id = csm.cook_id \
                                     LEFT JOIN `specility` s ON s.id = csm.specility_id \
                                     LEFT JOIN `cook_profile_image` cpimg ON cpimg.cook_id = pd.id\
-                                    WHERE pd.`name` = %s GROUP BY pd.id ORDER BY pd.name LIMIT %s OFFSET %s; ", [name, limit, offset])
+                                    WHERE pd.`name` = %s ORDER BY pd.name LIMIT %s OFFSET %s; ", [name, limit, offset])
         result = cursor.fetchall()
         response = [dict(zip(COOK_COLUMN_KEYS, row)) for row in result]
     return response

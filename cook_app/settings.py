@@ -74,10 +74,10 @@ WSGI_APPLICATION = 'cook_app.wsgi.application'
 DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.getenv("DB_LOCAL_NAME"),
-            'USER': os.getenv("DB_LOCAL_USER"),
-            'PASSWORD': os.getenv("DB_LOCAL_PASSWORD"),
-            'HOST': os.getenv("DB_LOCAL_HOST"),
+            'NAME': os.getenv("DB_PROD_NAME"),
+            'USER': os.getenv("DB_PROD_USER"),
+            'PASSWORD': os.getenv("DB_PROD_PASSWORD"),
+            'HOST': os.getenv("DB_PROD_HOST"),
             'PORT': '3306',
         }
     }

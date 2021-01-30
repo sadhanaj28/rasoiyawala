@@ -15,7 +15,7 @@
         <form name="addCookForm" action="/add_cook/" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <h3>Personal Details</h3>
-            <input class="form-input" type="text" name="firstname" id="name" placeholder="Enter your name" required>
+            <input class="form-input" type="text" name="name" id="name" placeholder="Enter your name" required>
             <!-- <input class="form-input" type="text" name="gender" id="gender" placeholder="Enter your gender" required> -->
             <select id="gender" name="gender" class="form-input" required>
                 <option value="Male">Male</option>
@@ -28,16 +28,16 @@
             <textarea class="form-input" name="description" id="description" cols="30" rows="10" placeholder="Ellaborate your concern"></textarea>
             
             <select id="north_indian_food" name="north_indian_food" class="form-input" required>
-                <option value="Yes">Yes, Cooks North Indian Food</option>
+                <option value="Yes">Yes, cooks North Indian Food</option>
                 <option value="No">No, don't cook North Indian Food</option>
             </select>
             <select id="south_indian_food" name="south_indian_food" class="form-input" required>
-                <option value="Yes">Yes, Cooks South Indian Food</option>
+                <option value="Yes">Yes, cooks South Indian Food</option>
                 <option value="No">No, don't cook South Indian Food</option>
             </select>
             <select id="chinees_food" name="chinees_food" class="form-input" required>
-                <option value="Yes">Yes, Cooks Chines Food</option>
-                <option value="No">No, don't cook Chines Indian Food</option>
+                <option value="Yes">Yes, cooks Other Food</option>
+                <option value="No">No, don't other Food</option>
             </select>
 
             <select class="drop-down" name="area" multiple="multiple" required>

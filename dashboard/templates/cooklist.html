@@ -19,7 +19,7 @@
       <input type="submit" value="Filter" class="btn btn-dark">
     </form>
   </div>
-</section>
+</section> 
 
 <section class="section">
   {% if message %}
@@ -34,20 +34,20 @@
     <li>
       <section class="section">
         <div class="paras">
-            <p class="sectionTag text-big">Name: {{ cook.name }}</p><br>
-            <p class="sectionSubTag text-small">Gender:  {{ cook.gender }} </p><br>
-            <p class="sectionSubTag text-small">Primary Contact number:  {{ cook.contact_number_one }}</p><br>
-            <p class="sectionSubTag text-small">Secondary Contact number:  {{ cook.contact_number_two }}</p><br>
-            <p class="sectionSubTag text-small">North Indian Food:  {{ cook.north_indian_food }}</p><br>
-            <p class="sectionSubTag text-small">South Indian Food:  {{ cook.south_indian_food }}</p><br>
-            <p class="sectionSubTag text-small">Chinees Food:  {{ cook.chinees_food }}</p><br>
+            <p class="sectionTag text-big">{{ cook.name }}</p><br>
+            <p class="sectionSubTag text-small" > <b>Gender :</b>  {{ cook.gender }} </p><br>
+            <p class="sectionSubTag text-small"> <b>Primary Contact number: </b> {{ cook.contact_number_one }}</p><br>
+            <p class="sectionSubTag text-small"><b>Secondary Contact number: </b> {{ cook.contact_number_two }}</p><br>
+            <p class="sectionSubTag text-small"><b>North Indian Food: </b> {{ cook.north_indian_food }}</p><br>
+            <p class="sectionSubTag text-small"><b>South Indian Food: </b> {{ cook.south_indian_food }}</p><br>
+            <p class="sectionSubTag text-small"><b>Chinees Food: </b>  {{ cook.chinees_food }}</p><br>
             <p class="sectionSubTag text-small">{{ cook.descriptions }}</p><br>
             {% for area in cook.area %}
-            <p class="sectionSubTag text-small">Area: {{ area }}</p><br>
+            <p class="sectionSubTag text-small"><b>Area: </b> {{ area }}</p><br>
             {% endfor %}
         </div>
         <dev class="thumbnail">
-            <img src="/media/images/{{cook.profile_pic}}" alt="laptop image" class="imgFluid">
+            <img src="/media/images/{{cook.profile_pic}}" width="200" height="200"  alt="laptop image" class="imgFluid">
         </dev>
       </section>
   </li>

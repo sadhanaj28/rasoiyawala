@@ -53,7 +53,7 @@ html{
 }
 
 .nav-list li a:hover{
-    color: orange;
+    color:yellow;
 }
 
 
@@ -116,6 +116,11 @@ html{
 
 .text-small{
     font-size:18px;
+}
+
+.text-yellow-small{
+    font-size:18px;
+    color: gold;
 }
 
 .btn{

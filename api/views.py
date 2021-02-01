@@ -12,7 +12,7 @@ from .serializers import CookSerializer, \
     CookProfileImageSerializer
 
 
-PAGE_LIMIT = 6
+PAGE_LIMIT = 200
 
 @csrf_exempt
 def cook_list(data={}):

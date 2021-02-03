@@ -34,22 +34,15 @@
     <li>
       <section class="section">
         <div class="paras">
+          <a href="{% url 'cookdetails_url' cook.id %}">
             <p class="sectionTag text-big">{{ cook.name }}</p><br>
-            <p class="sectionSubTag text-small" > <b>Gender :</b>  {{ cook.gender }} </p><br>
-            <p class="sectionSubTag text-small"> <b>Primary Contact number: </b> {{ cook.contact_number_one }}</p><br>
-            <p class="sectionSubTag text-small"><b>Secondary Contact number: </b> {{ cook.contact_number_two }}</p><br>
-            <p class="sectionSubTag text-small"><b>North Indian Food: </b> {{ cook.north_indian_food }}</p><br>
-            <p class="sectionSubTag text-small"><b>South Indian Food: </b> {{ cook.south_indian_food }}</p><br>
-            <p class="sectionSubTag text-small"><b>Chinees Food: </b>  {{ cook.chinees_food }}</p><br>
-            <p class="sectionSubTag text-small">{{ cook.descriptions }}</p><br>
-            {% for area in cook.area %}
-            <p class="sectionSubTag text-small"><b>Area: </b> {{ area }}</p><br>
-            {% endfor %}
+            </a>
         </div>
         <dev class="thumbnail">
-            <img src="/media/images/{{cook.profile_pic}}" width="200" height="200"  alt="laptop image" class="imgFluid">
+            <img src="/media/images/{{cook.profile_pic}}" width="100" height="100"  alt="laptop image" class="imgFluid">
         </dev>
       </section>
+      
   </li>
   {% endfor %}
 </ul>

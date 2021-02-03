@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 
 from .custom_serializers import get_json_obj, get_area_list_json
-from .utils import get_cook_using_area, get_cook_using_user_name, get_cook_list, get_area_list_from_db
+from .utils import get_cook_using_area, get_cook_using_user_name, get_cook_list, get_area_list_from_db, get_cook_using_id
 from .models import UserDetails, Location, Specility, CookLocationMapping, CookSpecilityMapping
 from .serializers import CookSerializer, \
     UserDetailsSerializer, \
@@ -215,3 +215,31 @@ class CookImage:
             return {"Error": "server down"}
         return {"success": "created successfully"}
 
+
+def getCookDetail(cook_id):
+    try:
+        cook_details = get_cook_using_id(cook_id)
+        dataList = []
+        cook_dict = {}
+        for cook in cook_details:
+            isMatch = False
+            for data in dataList:
+                if (data is None or data == {}):
+                    isMatch = False
+                    break
+                if cook['id'] == data['id']:
+                    isMatch = True
+                    if isinstance(cook['area'], list):
+                        for ca in cook['area']:
+                            data['area'].append(ca)
+                    else:
+                        data['area'].append(cook['area'])
+
+            if not isMatch: 
+                area = []
+                area.append(cook['area'])
+                cook['area'] = area  
+                dataList.append(cook)
+    except Exception as e:
+        return {"Error": "server down"}
+    return dataList

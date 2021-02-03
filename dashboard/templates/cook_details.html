@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% load paginator_templatetags %}
+{% load static %}
+
+{% block content %}
+
+  <section class="section">
+    <div class="paras">
+        <p class="sectionTag text-big">{{ cookdetails.name }}</p><br>
+        <p class="sectionSubTag text-small" > <b>Gender :</b>  {{ cookdetails.gender }} </p><br>
+        <p class="sectionSubTag text-small"> <b>Primary Contact number: </b> {{ cookdetails.contact_number_one }}</p><br>
+        <p class="sectionSubTag text-small"><b>Secondary Contact number: </b> {{ cookdetails.contact_number_two }}</p><br>
+        <p class="sectionSubTag text-small"><b>North Indian Food: </b> {{ cookdetails.north_indian_food }}</p><br>
+        <p class="sectionSubTag text-small"><b>South Indian Food: </b> {{ cookdetails.south_indian_food }}</p><br>
+        <p class="sectionSubTag text-small"><b>Chinees Food: </b>  {{ cookdetails.chinees_food }}</p><br>
+        <p class="sectionSubTag text-small">{{ cookdetails.descriptions }}</p><br>
+        {% for area in cookdetails.area %}
+        <p class="sectionSubTag text-small"><b>Area: </b> {{ area }}</p><br>
+        {% endfor %}
+    </div>
+    <dev class="thumbnail">
+        <img src="/media/images/{{cookdetails.profile_pic}}" width="200" height="200"  alt="laptop image" class="imgFluid">
+    </dev>
+  </section>
+
+{% endblock %}

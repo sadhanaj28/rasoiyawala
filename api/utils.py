@@ -104,3 +104,18 @@ def get_area_list_from_db():
     return row
 
 
+def get_cook_using_id(id):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT pd.`id`, pd.`name`, pd.`type`, pd.`gender`, pd.`pan_card`, cpimg.`profile_pic`, pd.`descriptions`, pd.`contact_number_one`,\
+                    pd.`contact_number_two`, ld.`city`, ld.`area`, s.`north_indian_food`,\
+                    s.`south_indian_food`, s.`chinees_food`, s.`other`, s.`food_pic_one`, s.`food_pic_two` FROM `user_details` pd \
+                    LEFT JOIN `cook_location_mapping` clm ON pd.id = clm.cook_id \
+                    LEFT JOIN `location` ld ON ld.id = clm.location_id\
+                    LEFT JOIN `cook_specility_mapping` csm ON pd.`id` = csm.`cook_id` \
+                    LEFT JOIN `specility` s ON s.id = csm.`specility_id` \
+                    LEFT JOIN `cook_profile_image` cpimg ON cpimg.cook_id = pd.id\
+                    WHERE pd.`id` = %s ORDER BY pd.name ; ", [id])
+        result = cursor.fetchall()
+        response = [dict(zip(COOK_COLUMN_KEYS, row)) for row in result]
+    return response
+

@@ -133,3 +133,9 @@ class AddCookView(View):
             print(e)
             return render(request, 'registration.html', context={'error_message': 'Server down, please try after sometimes ', 'area_list': location_list})
         return render(request, 'registration.html', context={'message': 'successfully created', 'area_list': location_list})
+
+
+def cookDetail(request, cook_id):
+
+    details = backend_view.getCookDetail(cook_id)
+    return render(request, 'cook_details.html', {'cookdetails': details[0]})

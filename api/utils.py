@@ -2,8 +2,14 @@ from django.db import connection
 # import logging
 # logger = logging.getLogger(__name__)
 
-COOK_COLUMN_KEYS = ['id', 'name', 'type', 'gender', 'pan_card', 'profile_pic', 'descriptions', 'contact_number_one', 'contact_number_two', 'city',
-                    'area', 'north_indian_food', 'south_indian_food', 'chinees_food', 'other', 'food_pic_one', 'food_pic_two']
+COOK_COLUMN_KEYS = ['id', 'name', 'type', 'gender', 'pan_card', 'profile_pic', 'descriptions', 
+                    'contact_number_one', 'contact_number_two', 'city',
+                    'area', 'north_indian_food', 'south_indian_food', 'chinees_food', 'other', 
+                    'food_pic_one', 'food_pic_two']
+
+JOB_COLUMN_KEYS = ['id', 'name', 'descriptions', 
+                    'contact_number_one', 'city',
+                    'area']
 
 
 def get_offset(page_number, limit):
@@ -117,5 +123,26 @@ def get_cook_using_id(id):
                     WHERE pd.`id` = %s ORDER BY pd.name ; ", [id])
         result = cursor.fetchall()
         response = [dict(zip(COOK_COLUMN_KEYS, row)) for row in result]
+    return response
+
+def get_job_list(limit=None, page_number=None):
+    with connection.cursor() as cursor:
+        if page_number == None:
+            cursor.execute("SELECT jd.id, jd.name, jd.descriptions, jd.contact_number_one,\
+                                ld.city, ld.area \
+                                FROM job_details jd \
+                                LEFT JOIN job_location_mapping clm ON jd.id = clm.job_id \
+                                LEFT JOIN location ld ON ld.id = clm.location_id \
+                                ORDER BY jd.name LIMIT %s;", [limit])
+        else:
+            offset = get_offset(page_number, limit)
+            cursor.execute("SELECT jd.id, jd.name, jd.descriptions, jd.contact_number_one,\
+                                ld.city, ld.area \
+                                FROM job_details jd \
+                                LEFT JOIN job_location_mapping clm ON jd.id = clm.job_id \
+                                LEFT JOIN location ld ON ld.id = clm.location_id \
+                                ORDER BY jd.name LIMIT %s OFFSET %s;", (limit, offset))
+        result = cursor.fetchall()
+        response = [dict(zip(JOB_COLUMN_KEYS, row)) for row in result]
     return response
 

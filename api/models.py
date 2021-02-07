@@ -100,3 +100,21 @@ class CookAddition(models.Model):
     is_new = models.BooleanField(default=True)
     class Meta:
         db_table = 'cook_addition'
+
+
+class JobDetails(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=200)
+    contact_number_one = models.CharField(max_length=10, default='0000000000')
+    descriptions = models.TextField(default=None)
+
+    class Meta:
+        db_table = 'job_details'
+
+class JobLocationMapping(models.Model):
+    id = models.AutoField(primary_key=True)
+    job_id = models.IntegerField()
+    location_id = models.IntegerField()
+
+    class Meta:
+        db_table = 'job_location_mapping'

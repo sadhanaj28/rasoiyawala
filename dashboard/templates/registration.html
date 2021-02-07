@@ -3,7 +3,7 @@
 {% block content %}
 
 <section class="contact" id="contact">
-    <h2 class="text-center">Registration</h2>
+    <h2 class="text-center">Cook Details</h2>
     {% if message %}
         <p class="alert alert-success" id="success_message">{{ message }}</p>
     {% endif %}
@@ -14,7 +14,7 @@
     <div class="form">
         <form name="addCookForm" action="/add_cook/" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <h3>Personal Details</h3>
+            <!-- <h3>Personal Details</h3> -->
             <input class="form-input" type="text" name="name" id="name" placeholder="Enter your name" required>
             <!-- <input class="form-input" type="text" name="gender" id="gender" placeholder="Enter your gender" required> -->
             <select id="gender" name="gender" class="form-input" required>

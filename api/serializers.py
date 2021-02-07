@@ -6,7 +6,9 @@ from .models import CookAddition, \
                     Location, \
                     Specility, \
                     UserDetails, \
-                    CookProfileImage
+                    CookProfileImage, \
+                    JobLocationMapping, \
+                    JobDetails
 
 
 # serializer the request/response
@@ -79,22 +81,6 @@ class CookSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'type', 'gender', 'pan_card', 'profile_pic',
                   'contact_number_one', 'contact_number_two', 'descriptions', 'location', 'specification')
 
-    # def to_representation(self, obj):
-    #     serialized_data = super(CookSerializer, self).to_representation(obj)  # original serialized data
-    #     s_m = CookSpecilityMapping.objects.filter(cook_id=obj.id)
-    #     # print('s_m-specility_id: ', s_m.id)
-    #     specification_list = []
-    #     for m in s_m:
-    #         spe = Specility.objects.get(id=m.specility_id)
-    #         s_SpecilitySerializer = SpecilitySerializer(spe, many=True)
-    #         print('s_SpecilitySerializer: ', s_SpecilitySerializer)
-    #         specification_list.append(SpecilitySerializer(spe))
-    #     specification = specification_list
-    #     serialized_data['specification'] = specification # replace id with category name
-    #     location = None
-    #     serialized_data['location'] = location
-    #     print('!!!! serialized_data: ', serialized_data)
-    #     return serialized_data  # return modified serialized data
 
     def get_specification(self, obj):
         values = obj  # whatever your filter values are. obj is the Research instance
@@ -117,3 +103,16 @@ class CookSerializer(serializers.ModelSerializer):
             location_list.append(loca.data)
         location = location_list
         return location
+
+
+
+class JobDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobDetails
+        fields = ('id', 'name','contact_number_one', 'descriptions')
+
+
+class JobLocationMappingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobLocationMapping
+        fields = ('id', 'job_id', 'location_id')

@@ -3,13 +3,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 
 from .custom_serializers import get_json_obj, get_area_list_json
-from .utils import get_cook_using_area, get_cook_using_user_name, get_cook_list, get_area_list_from_db, get_cook_using_id
+from .utils import get_cook_using_area, get_cook_using_user_name, get_cook_list, get_area_list_from_db, get_cook_using_id, get_job_list
 from .models import UserDetails, Location, Specility, CookLocationMapping, CookSpecilityMapping
 from .serializers import CookSerializer, \
     UserDetailsSerializer, \
     CookLocationMappingSerializer, \
     CookSpecilityMappingSerializer, \
-    CookProfileImageSerializer
+    CookProfileImageSerializer,\
+    JobDetailsSerializer, \
+    JobLocationMappingSerializer
 
 
 PAGE_LIMIT = 200
@@ -243,3 +245,86 @@ def getCookDetail(cook_id):
     except Exception as e:
         return {"Error": "server down"}
     return dataList
+
+
+@csrf_exempt
+def vacancy_list(data={}):
+
+    if data.keys() != []:
+        page_number = data.get('page', None)
+        
+        jobs = get_job_list(PAGE_LIMIT, page_number)
+
+        dataList = []
+        cook_dict = {}
+        for job in jobs:
+            isMatch = False
+            for data in dataList:
+                if (data is None or data == {}):
+                    isMatch = False
+                    break
+                if job['id'] == data['id']:
+                    isMatch = True
+                    if isinstance(job['area'], list):
+                        for ca in job['area']:
+                            data['area'].append(ca)
+                    else:
+                        data['area'].append(job['area'])
+
+            if not isMatch: 
+                area = []
+                area.append(job['area'])
+                job['area'] = area  
+                dataList.append(job)
+                
+        return dataList
+
+
+class JobView:
+
+    @classmethod
+    def mapping_location_with_job(cls, location_list, job_id):
+        for location in location_list:
+            area = location['area']
+            if len(Location.objects.filter(area=area)):
+                location_id = Location.objects.get(area=area).id
+                job_location_mapping = {'job_id': job_id, 'location_id': location_id}
+                location_serializer = JobLocationMappingSerializer(data=job_location_mapping)
+                if location_serializer.is_valid(raise_exception=True):
+                    location_serializer.save()
+            else:
+                return False
+        return True
+
+
+    @classmethod
+    def create_job_details(cls, job_details):
+        job_detail = job_details.get('job_details')
+        success_msg = ''
+        error_msg = ''
+        job_id = ''
+        try:
+            serializer = JobDetailsSerializer(data=job_detail)
+            if serializer.is_valid(raise_exception=True):
+                job_saved = serializer.save()
+                job_id = job_saved.id
+            location_list = job_details.get('location')
+            JobView.mapping_location_with_job(location_list, job_id)
+            
+        except ValidationError as v:
+            error_msg = 'Server error '
+            return job_id, success_msg, error_msg
+        except Exception as e:
+            return job_id, success_msg, 'server down'
+        return job_id, success_msg, error_msg
+
+    @classmethod
+    def post(cls, data):
+        job_details = data
+        job_id = ''
+        
+        try:
+            job_id, success_message, error_message = JobView.create_job_details(job_details)
+        except Exception as e:
+            return {"success": '', 'error_message': e, "Job_Id": job_id}
+        return {"success": success_message, 'error_message': '', "Job_Id": job_id}

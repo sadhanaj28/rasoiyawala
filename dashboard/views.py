@@ -139,3 +139,74 @@ def cookDetail(request, cook_id):
 
     details = backend_view.getCookDetail(cook_id)
     return render(request, 'cook_details.html', {'cookdetails': details[0]})
+
+
+class VacancyListView(View):
+
+    def get(self, request, *args, **kwargs):
+        page = max(int(request.GET['page']), 1) if "page" in request.GET else 1
+        limit = settings.PAGE_SIZE
+
+        data = {}
+
+        try:
+            # area_list = backend_view.get_area_list() 
+            vacancy_list = backend_view.vacancy_list(data)
+
+            page_details = {
+                'page': page,
+                'limit': limit,
+                'count': len(vacancy_list)
+            }
+            
+            if len(vacancy_list) == 0:
+                return render(request, 'vacancy_list.html', context={'vacancy_list': vacancy_list,
+                                                                'page_details': page_details,
+                                                                'message': 'No result'})
+
+            return render(request, 'vacancy_list.html', context={'vacancy_list': vacancy_list,
+                                                                'page_details': page_details})
+        except Exception as e:
+            print(e)
+            return render(request, 'vacancy_list.html', context={'vacancy_list': [],
+                                                                'page_details': {},
+                                                                'message': 'No result'})
+
+
+@method_decorator(csrf_protect, name='dispatch')
+class JobView(View):
+
+    def get(self, request, *args, **kwargs):
+        area_list = backend_view.get_area_list() 
+
+        return render(request, 'add_jobs.html', context={'area_list': area_list})
+
+    def post(self, request, *args, **kwargs):
+        agreement= request.POST.get('terms')
+        
+        job_details = {'name': request.POST.get('name'),
+                        'contact_number_one': request.POST.get('primary_contact_number'),
+                        'descriptions': request.POST.get('description')
+                        }
+
+        area_list = request.POST.getlist('area')
+        location = list()
+        for area in area_list:
+            area_dic = {'area': area}
+            location.append(area_dic)
+
+        data = {'job_details': job_details,
+                'location': location}
+        headers = {"content-type": "application/json"}
+        location_list = backend_view.get_area_list() 
+        try:
+            response_data = backend_view.JobView.post(data)
+            cook_json_data = response_data 
+            
+            if cook_json_data['error_message'] != '':
+                return render(request, 'add_jobs.html',
+                              context={'error_message': 'Invalid Mobile Number, use unique 10 digit mobile no',
+                                       'area_list': location_list})
+        except Exception as e:
+            return render(request, 'add_jobs.html', context={'error_message': 'Server down, please try after sometimes ', 'area_list': location_list})
+        return render(request, 'add_jobs.html', context={'message': 'successfully created', 'area_list': location_list})

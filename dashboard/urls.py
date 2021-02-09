@@ -7,8 +7,8 @@ from .views import CookListView, AddCookView, HomeView, cookDetail, VacancyListV
 urlpatterns = [
     url(r'^add_cook', AddCookView.as_view(), name="add_cook_url"),
     url(r'^add_job', JobView.as_view(), name="add_job_url"),
-    path('^cooklist', CookListView.as_view(), name="cooklist_url"),
-    path('^vacancylist', VacancyListView.as_view(), name="vacancylist_url"),
+    url(r'^cooklist', CookListView.as_view(), name="cooklist_url"),
+    url(r'^cook_job', VacancyListView.as_view(), name="cook_job_url"),
     path('cookdetails/<int:cook_id>/', cookDetail, name='cookdetails_url'),
     path('', HomeView.as_view(), name="home_url"),
 ]

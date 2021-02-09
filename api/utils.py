@@ -11,6 +11,8 @@ JOB_COLUMN_KEYS = ['id', 'name', 'descriptions',
                     'contact_number_one', 'city',
                     'area']
 
+SMS_COLUMN_KEYS = ['contact_number_one']
+
 
 def get_offset(page_number, limit):
     if int(page_number) <= 1:
@@ -144,5 +146,13 @@ def get_job_list(limit=None, page_number=None):
                                 ORDER BY jd.name LIMIT %s OFFSET %s;", (limit, offset))
         result = cursor.fetchall()
         response = [dict(zip(JOB_COLUMN_KEYS, row)) for row in result]
+    return response
+
+
+def get_cook_contact_number_list():
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT contact_number_one FROM user_details;")
+        result = cursor.fetchall()
+        response = [dict(zip(SMS_COLUMN_KEYS, row)) for row in result]
     return response
 

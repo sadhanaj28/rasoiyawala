@@ -1,9 +1,14 @@
+import requests 
+import json
+from dotenv import load_dotenv
+import os
+
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 
 from .custom_serializers import get_json_obj, get_area_list_json
-from .utils import get_cook_using_area, get_cook_using_user_name, get_cook_list, get_area_list_from_db, get_cook_using_id, get_job_list
+from .utils import get_cook_using_area, get_cook_using_user_name, get_cook_list, get_area_list_from_db, get_cook_using_id, get_job_list, get_cook_contact_number_list
 from .models import UserDetails, Location, Specility, CookLocationMapping, CookSpecilityMapping
 from .serializers import CookSerializer, \
     UserDetailsSerializer, \
@@ -14,7 +19,9 @@ from .serializers import CookSerializer, \
     JobLocationMappingSerializer
 
 
+load_dotenv(verbose=True)
 PAGE_LIMIT = 200
+
 
 @csrf_exempt
 def cook_list(data={}):
@@ -325,6 +332,51 @@ class JobView:
         
         try:
             job_id, success_message, error_message = JobView.create_job_details(job_details)
+            cook_contact_res = get_cook_contact_number_list()
+            contact_list = ''
+            for contact_dict in cook_contact_res:
+                contact_list +=contact_dict['contact_number_one']+','
+            msg = 'hi' # job_details['job_details']['descriptions'][:30]
+            send_fast_sms(contact_list, msg)
         except Exception as e:
             return {"success": '', 'error_message': e, "Job_Id": job_id}
         return {"success": success_message, 'error_message': '', "Job_Id": job_id}
+
+
+def send_fast_sms(contact_list, msg):
+    # mention url 
+    url = "https://www.fast2sms.com/dev/bulkV2"
+    
+    job_msg = 'Job www.cookdukan.com/cook_job'
+    # create a dictionary 
+    my_data = { 
+        # Your default Sender ID 
+        'sender_id': 'SMSINI',  
+        
+        # Put your message here! 
+        # 'message': 'This is a test message', 
+        "message" : "7",
+        "variables_values" : job_msg,  
+        
+        'language': 'english', 
+        'route': 's', 
+        
+        # You can send sms to multiple numbers 
+        # separated by comma. 
+        'numbers': contact_list    
+    } 
+
+    # create a dictionary 
+    headers = { 
+        'authorization': os.getenv("FAST_SMS_KEY"),
+        'Content-Type': "application/x-www-form-urlencoded", 
+        'Cache-Control': "no-cache"
+    }
+
+    response = requests.request("POST", 
+                            url, 
+                            data = my_data, 
+                            headers = headers) 
+    
+    #load json data from source 
+    returned_msg = json.loads(response.text) 

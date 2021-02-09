@@ -270,6 +270,7 @@ html{
     }
     .v-class-resp{
         opacity: 0;
+        display:none
     }
     .section{
         flex-direction: column-reverse;

@@ -319,3 +319,49 @@ html{
     background-color: #0000b3;
     color: white;
   }
+
+
+.dropdown-main {
+    float: left;
+    overflow: hidden;
+  }
+  
+  .dropdown-main .dropbtn {
+    font-size: 20px;  
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    margin: 0;
+  }
+  
+  .dropdown-main:hover .dropbtn {
+    background-color: gold;
+  }
+
+  .dropdown-sub {
+    display: none;
+    position: absolute;
+    background-color: goldenrod;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-sub a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+  }
+
+  .dropdown-sub a:hover {
+    background-color:gold;
+  }
+  
+  .dropdown-main:hover .dropdown-sub {
+    display: block;
+  }

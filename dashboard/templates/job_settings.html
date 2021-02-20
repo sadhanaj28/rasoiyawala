@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+<a href="{% url 'add_job_url'%}">
+<button id="submit" type="submit" value="Submit" class="btn btn-dark button1">Add New Vacancy</button>
+</a>
+<h3>Your have added Vacancy</h3>
+<ul>
+    <li>
+      <section class="section">
+        <div class="paras">
+            <p class="sectionTag text-small">Name: Sadhana</p><br>
+            <p class="sectionSubTag text-small"> Phone: 8898989999</p><br>
+            <p class="sectionSubTag text-small">Email: sadad</p><br>
+            <p class="sectionSubTag text-small">Password: asdasd</p><br>
+            <button id="submit" type="submit" value="Submit" class="btn btn-dark button1">Update</button>
+            <button id="submit" type="submit" value="Submit" class="btn btn-dark button1">Delete</button>
+            
+        </div>
+      </section>
+      
+  </li>
+  <hr>
+</ul>
+
+{% endblock %}

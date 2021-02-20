@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+
+<section class="contact" id="contact">
+    <h2 class="text-center">SignUp Form</h2>
+    {% if message %}
+        <p class="alert alert-success" id="success_message">{{ message }}</p>
+    {% endif %}
+    {% if error_message %}
+        <p class="alert alert-danger" id="error_message">{{ error_message }}</p>
+    {% endif %}
+    <div class="form">
+        <form name="signUpForm" action="{% url 'signup_url' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input class="form-input" type="text" name="first_name" id="first_name" placeholder="First Name" required>
+            <input class="form-input" type="text" name="middle_name" id="middle_name" placeholder="Middle Name">
+            <input class="form-input" type="text" name="last_name" id="last_name" placeholder="Last Name" required>
+            <input class="form-input" type="text" name="phone_number" id="phone_number" placeholder="Enter your phone" maxlength="10" required >
+            <input class="form-input" type="text" name="email" id="email" placeholder="Enter your email" >
+            <input class="form-input" type="text" name="password" id="password" placeholder="password" required>
+            <button id="submit" type="submit" value="Submit" class="btn btn-dark button1">SignUp</button>
+        </form>
+        <br><br>
+    </div>
+</section>
+
+{% endblock %}

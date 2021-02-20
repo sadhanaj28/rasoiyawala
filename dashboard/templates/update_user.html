@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+
+<section class="contact" id="contact">
+    <h2 class="text-center">Personal Details</h2>
+    {% if error_message %}
+        <p class="alert alert-danger" id="error_message">{{ error_message }}</p>
+    {% endif %}
+    <div class="form">
+        <form name="userUpdateForm" action="{% url 'user_update_url' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input class="form-input" type="text" name="first_name" id="first_name" placeholder="Enter your first name" required>
+            <input class="form-input" type="text" name="middle_name" id="middle_name" placeholder="Enter your middle name" required>
+            <input class="form-input" type="text" name="last_name" id="last_name" placeholder="Enter your last name" required>
+            <input class="form-input" type="text" name="phone_number" id="phone_number" placeholder="Enter your phone" maxlength="10" required >
+            <input class="form-input" type="text" name="email" id="email" placeholder="Enter your email" >
+            <button id="submit" type="submit" value="Submit" class="btn btn-dark button1">Update</button>
+        </form>
+        <br><br>
+    </div>
+</section>
+
+{% endblock %}

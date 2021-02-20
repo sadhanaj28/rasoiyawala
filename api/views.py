@@ -6,17 +6,24 @@ import os
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
+from django.core.exceptions import ValidationError
+
+from passlib.hash import sha256_crypt
 
 from .custom_serializers import get_json_obj, get_area_list_json
 from .utils import get_cook_using_area, get_cook_using_user_name, get_cook_list, get_area_list_from_db, get_cook_using_id, get_job_list, get_cook_contact_number_list
-from .models import UserDetails, Location, Specility, CookLocationMapping, CookSpecilityMapping
+from .models import UserDetails, Location, Specility, CookLocationMapping, CookSpecilityMapping, User
 from .serializers import CookSerializer, \
     UserDetailsSerializer, \
     CookLocationMappingSerializer, \
     CookSpecilityMappingSerializer, \
     CookProfileImageSerializer,\
     JobDetailsSerializer, \
-    JobLocationMappingSerializer
+    JobLocationMappingSerializer, \
+    UserSerializer, \
+    UserJobMappingSerializer, \
+    UserCookMappingSerializer
+from . import constants
 
 
 load_dotenv(verbose=True)
@@ -180,6 +187,18 @@ class CookView:
             return cook_id, success_msg, 'server down'
         return cook_id, success_msg, error_msg
 
+
+    @classmethod
+    def mapping_cook_with_user(cls, user_id, cook_id):
+        user_cook_mapping = {'cook_id': cook_id, 'user_id': user_id}
+        user_cook_serializer = CookLocationMappingSerializer(data=user_cook_mapping)
+        if user_cook_serializer.is_valid(raise_exception=True):
+            user_cook_serializer.save()
+        else:
+            return False
+        return True
+
+
     @classmethod
     def get(cls):
         users = UserDetails.objects.all()
@@ -189,7 +208,9 @@ class CookView:
     @classmethod
     def post(cls, data):
         cook_details = data
-        cook_id = ''
+        cook_id = None
+        success_message = None
+        error_message = None
         
         try:
             # if UserDetails.objects.get(pan_card=cook_details.get('personal_details')['pan_card']):
@@ -200,12 +221,13 @@ class CookView:
                 CookView.update_cook_personal_info(cook_details)
                 CookView.update_cook_location_info(cook_id, cook_details)
                 CookView.update_cook_specifications_info(cook_id, cook_details)
+                CookView.mapping_cook_with_user(data['user_id'], cook_id)
                 success_message = 'successfully updated'
             else:
                 cook_id, success_message, error_message = CookView.create_cook_details(cook_details)
         except Exception as e:
-            return {"success": '', 'error_message': e, "Cook_id": cook_id}
-        return {"success": success_message, 'error_message': '', "Cook_id": cook_id}
+            return {"success": '', 'error_message':str(e), "Cook_id": cook_id}
+        return {"success": success_message, 'error_message': error_message, "Cook_id": cook_id}
 
 
 class CookImage:
@@ -305,31 +327,40 @@ class JobView:
 
 
     @classmethod
-    def create_job_details(cls, job_details):
-        job_detail = job_details.get('job_details')
-        success_msg = ''
-        error_msg = ''
-        job_id = ''
+    def create_job_details(cls, data):
+        job_detail = data.get('job_details')
+        success_msg = None
+        error_msg = None
+        job_id = None
+        user_id = data['user_id']
         try:
             serializer = JobDetailsSerializer(data=job_detail)
             if serializer.is_valid(raise_exception=True):
                 job_saved = serializer.save()
                 job_id = job_saved.id
             location_list = job_details.get('location')
+
+            # mapping job with location
             JobView.mapping_location_with_job(location_list, job_id)
+
+            # mapping job with user
+            user_job_mapping = {'job_id': job_id, 'user_id': user_id}
+            user_job_serializer = UserJobMappingSerializer(data=user_job_mapping)
+            if user_job_serializer.is_valid(raise_exception=True):
+                user_job_serializer.save()
             
         except ValidationError as v:
-            error_msg = 'Server error '
+            error_msg = str(v)
             return job_id, success_msg, error_msg
         except Exception as e:
-            return job_id, success_msg, 'server down'
+            return job_id, success_msg, str(e)
         return job_id, success_msg, error_msg
 
     @classmethod
     def post(cls, data):
         job_details = data
         job_id = ''
-        
+        user_id = data['user_id']
         try:
             job_id, success_message, error_message = JobView.create_job_details(job_details)
             cook_contact_res = get_cook_contact_number_list()
@@ -380,3 +411,77 @@ def send_fast_sms(contact_list, msg):
     
     #load json data from source 
     returned_msg = json.loads(response.text) 
+
+
+class UserView:
+
+    @classmethod
+    def getById(cls, user_id):
+        error_msg = ''
+        user = User.objects.get(id=user_id)
+        if user is None:
+            # invalid
+            error_msg = 'invalid Id'
+        return user, error_msg
+
+    @classmethod
+    def getByPwdPhone(cls, data):
+        error_msg = ''
+        user = User.objects.filter(phone_number=data[constants.phone_number], password=data[constants.password])
+        if user is None:
+            # invalid
+            error_msg = constants.invalid_credential
+        return user, error_msg
+    
+    @classmethod
+    def create(cls, user_details):
+        # user_details = user_details.get(constants.data)
+        success_msg = None
+        error_msg = None
+        user_details[constants.password] = sha256_crypt.encrypt(user_details[constants.password])
+        user_id = None
+        try:
+            serializer = UserSerializer(data=user_details)
+            if serializer.is_valid(raise_exception=True):
+                user_saved = serializer.save()  
+                user_id =  user_saved.id
+                print(user_id)
+        except ValidationError as v:
+            error_msg = str(v)
+            return success_msg, error_msg
+        except Exception as e:
+            error_msg = str(e)
+            return success_msg, error_msg
+        return user_id, error_msg
+    
+    @classmethod
+    def update(cls, data):
+        try:
+            User.objects.filter(id=data[constants.user_id]).update(first_name=data[constants.first_name],
+                                                    middle_name=data[constants.middle_name],
+                                                    last_name=data[constants.last_name], 
+                                                    email=data[constants.email], 
+                                                    phone_number=data[constants.phone_number])
+        except Exception as e:
+            return None, str(e)
+        return constants.update_msg, None
+    
+    @classmethod
+    def user_varify(cls, data):
+        try:
+            user = User.objects.get(phone_number=data[constants.phone_number])
+            is_valid = sha256_crypt.verify(data[constants.password], user.password)
+            if not is_valid:
+                return None, constants.invalid_credential
+        except Exception as e:
+            return None, str(e)
+        return user, None
+    
+    @classmethod
+    def reset_password(cls, data):
+        pass
+
+    @classmethod
+    def varify_otp(cls, data):
+        pass
+        

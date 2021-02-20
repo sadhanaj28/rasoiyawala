@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+
+<section class="section">
+  {% if message %}
+    <p class="alert alert-success" id="success_message">{{ message }}</p>
+  {% endif %}
+
+    <hr style="margin-top: 70px; margin-bottom: auto;">
+</section>
+
+<!-- <ul>
+    <li>
+      <section class="section">
+        <div class="paras">
+            <p class="sectionTag text-small">First Name: {{ user_details.first_name }}</p><br>
+            <p class="sectionTag text-small">Middle Name: {{ user_details.middle_name }}</p><br>
+            <p class="sectionTag text-small">Last Name: {{ user_details.last_name }}</p><br>
+            <p class="sectionSubTag text-small"> Phone: {{ user_details.phone_number }}</p><br>
+            <p class="sectionSubTag text-small">Email: {{ user_details.email }}</p><br>
+            <a href="{% url 'user_update_url' %}">
+            <button type="submit" class="btn btn-dark button1">Change</button>
+            </a>
+            
+        </div>
+      </section>
+      
+  </li>
+  <hr>
+</ul> -->
+
+<section class="contact" id="contact">
+  <h2 class="text-center">Personal Details</h2>
+  {% if error_message %}
+      <p class="alert alert-danger" id="error_message">{{ error_message }}</p>
+  {% endif %}
+  <div class="form">
+    <p class="sectionTag text-small">First Name: {{ user_details.first_name }}</p><br>
+    <p class="sectionTag text-small">Middle Name: {{ user_details.middle_name }}</p><br>
+    <p class="sectionTag text-small">Last Name: {{ user_details.last_name }}</p><br>
+    <p class="sectionSubTag text-small"> Phone: {{ user_details.phone_number }}</p><br>
+    <p class="sectionSubTag text-small">Email: {{ user_details.email }}</p><br>
+    <a href="{% url 'user_update_url' %}">
+    <button type="submit" class="btn btn-dark button1">Change</button>
+    </a>
+      <br><br>
+  </div>
+</section>
+
+
+{% endblock %}

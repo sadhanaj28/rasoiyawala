@@ -1,5 +1,6 @@
 import json
 import requests
+import datetime
 from time import sleep
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -9,6 +10,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import View
 from django.conf import settings
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
 from api import views as backend_view 
 
@@ -74,6 +77,9 @@ class AddCookView(View):
         return render(request, 'registration.html', context={'area_list': area_list})
 
     def post(self, request, *args, **kwargs):
+        user_id = None
+        if request.session.get('is_login', False):
+            user_id = request.session.get('user_id')
         agreement= request.POST.get('terms')
         
         personal_details = {'name': request.POST.get('name'),
@@ -100,7 +106,8 @@ class AddCookView(View):
         specification.append(specification_dic)
         data = {'personal_details': personal_details,
                 'location': location,
-                'specification': specification}
+                'specification': specification,
+                'user_id': user_id}
 
         headers = {"content-type": "application/json"}
         json_data = json.dumps(data)
@@ -183,7 +190,9 @@ class JobView(View):
 
     def post(self, request, *args, **kwargs):
         agreement= request.POST.get('terms')
-        
+        user_id = None
+        if request.session.get('is_login', False):
+            user_id = request.session.get('user_id')
         job_details = {'name': request.POST.get('name'),
                         'contact_number_one': request.POST.get('primary_contact_number'),
                         'descriptions': request.POST.get('description')
@@ -196,7 +205,8 @@ class JobView(View):
             location.append(area_dic)
 
         data = {'job_details': job_details,
-                'location': location}
+                'location': location,
+                'user_id':user_id}
         headers = {"content-type": "application/json"}
         location_list = backend_view.get_area_list() 
         try:
@@ -210,3 +220,133 @@ class JobView(View):
         except Exception as e:
             return render(request, 'add_jobs.html', context={'error_message': 'Server down, please try after sometimes ', 'area_list': location_list})
         return render(request, 'add_jobs.html', context={'message': 'successfully created', 'area_list': location_list})
+
+
+# @login_required
+@method_decorator(csrf_protect, name='dispatch')
+class CookSettingsView(View):
+
+    def get(self, request, *args, **kwargs):
+        if request.session.get('is_login', False):
+            user_id = request.session.get('user_id')
+            # user, msg = backend_view.UserView.getById(user_id)
+            user_details = {}
+            return render(request, 'cook_settings.html', context={'user_details': user_details})
+        else:
+            return render(request, 'login.html')
+
+
+# @login_required
+@method_decorator(csrf_protect, name='dispatch')
+class JobSettingsView(View):
+    def get(self, request, *args, **kwargs):
+        if request.session.get('is_login', False):
+            user_id = request.session.get('user_id')
+            # user, msg = backend_view.UserView.getById(user_id)
+            user_details = {}
+            return render(request, 'job_settings.html', context={'user_details': user_details})
+        else:
+            return render(request, 'login.html')
+
+
+# @login_required
+@method_decorator(csrf_protect, name='dispatch')
+class UserSettingsView(View):
+    def get(self, request, *args, **kwargs):
+        
+        if request.session.get('is_login', False):
+            user_id = request.session.get('user_id')
+            user, msg = backend_view.UserView.getById(user_id)
+            user_details = {}
+            user_details['first_name'] = user.first_name
+            user_details['middle_name'] = user.middle_name
+            user_details['last_name'] = user.last_name
+            user_details['email'] = user.email
+            user_details['phone_number'] = user.phone_number
+            return render(request, 'personal_settings.html', context={'user_details': user_details})
+        else:
+            return render(request, 'login.html')
+
+
+@method_decorator(csrf_protect, name='dispatch')
+class LoginView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'login.html')
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        data['phone_number'] = request.POST.get('phone_number')
+        data['password'] = request.POST.get('password')
+        print(data)
+        user, msg = backend_view.UserView.user_varify(data)
+        print(user, msg)
+        if user is None:
+            return render(request, 'login.html', context={'error_message': msg})
+        
+        request.session.set_expiry(86400) #sets the exp. value of the session
+        request.session['is_login'] = True 
+        request.session['user_id'] = user.id
+        user_details = {}
+        user_details['first_name'] = user.first_name
+        user_details['middle_name'] = user.middle_name
+        user_details['last_name'] = user.last_name
+        user_details['email'] = user.email
+        user_details['phone_number'] = user.phone_number
+        return render(request, 'personal_settings.html', context={'user_details': user_details})
+
+
+@method_decorator(csrf_protect, name='dispatch')
+class LogoutView(View):
+    def get(self, request, *args, **kwargs):
+        is_login = request.session.pop('is_login',None)
+        user_id = request.session.pop('user_id',None)
+        return render(request, 'home.html')
+
+@method_decorator(csrf_protect, name='dispatch')
+class SignupView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'signup.html')
+    
+    def post(self, request, *args, **kwargs):
+        user_details = {}
+        user_details['first_name'] = request.POST.get('first_name')
+        user_details['last_name'] = request.POST.get('last_name')
+        user_details['middle_name'] = request.POST.get('middle_name')
+        user_details['email'] = request.POST.get('email')
+        user_details['phone_number'] = request.POST.get('phone_number')
+        user_details['created_at'] = datetime.datetime.now().date()
+        user_details['password'] = request.POST.get('password')
+        user_id, msg = backend_view.UserView.create(user_details)
+        if msg is not None:
+            return render(request, 'signup.html',
+                              context={'error_msg': msg})
+        del user_details['password']
+        user_details['user_id'] = user_id
+        request.session.set_expiry(86400) #sets the exp. value of the session
+        request.session['is_login'] = True 
+        request.session['user_id'] = user_id
+        return render(request, 'personal_settings.html',
+                              context={'user_details': user_details})
+
+
+class UserUpdateView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'update_user.html')
+    
+    def post(self, request, *args, **kwargs):
+        user_details = {}
+        # if request.session.get('is_login', False):
+        user_details['id'] = request.session.get('user_id')
+        user_details['first_name'] = request.POST.get('first_name')
+        user_details['last_name'] = request.POST.get('last_name')
+        user_details['middle_name'] = request.POST.get('middle_name')
+        user_details['email'] = request.POST.get('email')
+        user_details['phone_number'] = request.POST.get('phone_number')
+        succes_msg, error_msg = backend_view.UserView.update(user_details)
+        if error_msg is not None:
+            return render(request, 'update_user.html',
+                              context={'error_message': error_msg})
+        return render(request, 'personal_settings.html',
+                              context={'user_details': user_details, 'message': succes_msg})
+
+        

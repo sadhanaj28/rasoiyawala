@@ -42,7 +42,7 @@ html{
 
 .nav-list li{
     list-style: none;
-    padding: 26px 30px;
+    padding: 10px 20px;
 }
 
 .nav-list li a{
@@ -53,6 +53,28 @@ html{
 }
 
 .nav-list li a:hover{
+    color:yellow;
+}
+
+.nav-list2{
+    width: 70%;
+    display: flex;
+    align-items: center;
+}
+
+.nav-list2 li{
+    list-style: none;
+    padding: 10px 20px;
+}
+
+.nav-list2 li a{
+    text-decoration: none;
+    color: white;
+    font-family: 'Ubuntu', sans-serif ;
+    font-size: 20px;
+}
+
+.nav-list2 li a:hover{
     color:yellow;
 }
 
@@ -339,13 +361,13 @@ html{
   }
   
   .dropdown-main:hover .dropbtn {
-    background-color: gold;
+    background-color: #4955649c;
   }
 
   .dropdown-sub {
     display: none;
     position: absolute;
-    background-color: goldenrod;
+    background-color: #4955649c;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
@@ -361,7 +383,7 @@ html{
   }
 
   .dropdown-sub a:hover {
-    background-color:gold;
+    background-color:#006eff83;
   }
   
   .dropdown-main:hover .dropdown-sub {

@@ -28,8 +28,8 @@
             </div>
           </div> 
     </ul>
-    <div class="rightNav v-class-resp">
-      <ul class="nav-list v-class-resp"> 
+    <nav class="rightNav v-class-resp">
+      <ul class="nav-list2 v-class-resp"> 
         {% if request.session.user_id %}
         <li> <a href="{% url 'logout_url' %}">Logout</a> </li>
         {% else %}
@@ -37,7 +37,7 @@
         <li> <a href="{% url 'signup_url' %}">SignUp</a> </li>
         {% endif %}
     </ul>
-    </div>
+    </nav>
     <div class="burger">
         <div class="line"></div>
         <div class="line"></div>

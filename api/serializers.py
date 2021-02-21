@@ -8,7 +8,10 @@ from .models import CookAddition, \
                     UserDetails, \
                     CookProfileImage, \
                     JobLocationMapping, \
-                    JobDetails
+                    JobDetails, \
+                    User, \
+                    UserCookMapping, \
+                    UserJobMapping
 
 
 # serializer the request/response
@@ -116,3 +119,24 @@ class JobLocationMappingSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobLocationMapping
         fields = ('id', 'job_id', 'location_id')
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'first_name','middle_name', 'last_name', 'email', 'phone_number', 'password', 'created_at')
+
+
+class UserJobMappingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserJobMapping
+        fields = ('id', 'user_id', 'job_id')
+
+
+
+class UserCookMappingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserCookMapping
+        fields = ('id', 'user_id', 'cook_id')
+
+

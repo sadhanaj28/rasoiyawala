@@ -22,9 +22,22 @@ def get_offset(page_number, limit):
     return offset
 
 
-def get_cook_list(limit=None, page_number=None):
+def get_cook_list(limit=None, page_number=None, user_id=None):
     with connection.cursor() as cursor:
-        if page_number == None:
+        if user_id is not None:
+            cursor.execute("SELECT pd.id, pd.name, pd.type, pd.gender, pd.pan_card, cpimg.profile_pic, \
+                            pd.descriptions, pd.contact_number_one,\
+                            pd.contact_number_two, ld.city, ld.area, s.north_indian_food, \
+                            s.south_indian_food, s.chinees_food, s.other, s.food_pic_one, s.food_pic_two FROM user_details pd \
+                            LEFT JOIN cook_location_mapping clm ON pd.id = clm.cook_id \
+                            LEFT JOIN location ld ON ld.id = clm.location_id \
+                            LEFT JOIN cook_specility_mapping csm ON pd.id = csm.cook_id \
+                            LEFT JOIN specility s ON s.id = csm.specility_id \
+                            LEFT JOIN cook_profile_image cpimg ON cpimg.cook_id = pd.id \
+                            LEFT JOIN user_cook_mapping ucm ON ucm.cook_id = pd.id \
+                            where ucm.user_id = %s \
+                            ORDER BY pd.name ;", [user_id])
+        elif page_number == None:
             cursor.execute("SELECT pd.`id`, pd.`name`, pd.`type`, pd.`gender`, pd.`pan_card`, cpimg.`profile_pic`, pd.`descriptions`, pd.`contact_number_one`,\
                             pd.`contact_number_two`, ld.`city`, ld.`area`, s.`north_indian_food`,\
                             s.`south_indian_food`, s.`chinees_food`, s.`other`, s.`food_pic_one`, s.`food_pic_two` FROM `user_details` pd \
@@ -127,9 +140,23 @@ def get_cook_using_id(id):
         response = [dict(zip(COOK_COLUMN_KEYS, row)) for row in result]
     return response
 
-def get_job_list(limit=None, page_number=None):
+def get_job_list(limit=None, page_number=None, user_id=None, job_id=None):
     with connection.cursor() as cursor:
-        if page_number == None:
+        if job_id != None:
+            cursor.execute("SELECT jd.id, jd.name, jd.descriptions, jd.contact_number_one, ld.city, ld.area FROM job_details jd \
+                    LEFT JOIN job_location_mapping clm ON jd.id = clm.job_id \
+                    LEFT JOIN location ld ON ld.id = clm.location_id \
+                    LEFT JOIN user_job_mapping ujm ON ujm.job_id = jd.id \
+                    where jd.id = %s \
+                    ORDER BY jd.name", [job_id])
+        elif user_id != None:
+            cursor.execute("SELECT jd.id, jd.name, jd.descriptions, jd.contact_number_one, ld.city, ld.area FROM job_details jd \
+                    LEFT JOIN job_location_mapping clm ON jd.id = clm.job_id \
+                    LEFT JOIN location ld ON ld.id = clm.location_id \
+                    LEFT JOIN user_job_mapping ujm ON ujm.job_id = jd.id \
+                    where ujm.user_id = %s \
+                    ORDER BY jd.name", [user_id])
+        elif page_number == None:
             cursor.execute("SELECT jd.id, jd.name, jd.descriptions, jd.contact_number_one,\
                                 ld.city, ld.area \
                                 FROM job_details jd \

@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block content %}
+<hr style="height:0px;border-width:3px;color:#0A82EC;background-color:#0A82EC">
 
 <section class="section">
   <dev class="thumbnail">
@@ -10,8 +11,8 @@
   </dev>
   <div class="paras"> 
     <form action="{% url 'cooklist_url' %}" method="GET">
-      <select name="area" class="drop-down">
-        <option value="default">Sort by: Area</option>
+      <select name="area" class="drop-down button1">
+        <option value="default" >Sort by: Area</option>
         {% for area in area_list %}
           <option value="{{ area }}">{{ area }}</option>
         {% endfor %}
@@ -28,7 +29,7 @@
 
   
 </section>
-<hr style="height:0px;border-width:7px;color:#ffff99;background-color:#ffff99">
+<hr style="height:1px;border-width:0px;color:#0a82ec5e;background-color:#0a82ec5e">
   <ul>
     {% for cook in cook_list %}
     
@@ -41,6 +42,7 @@
             <button type="submit" class="btn btn-dark button1"> View Contact details</button>
             <!-- <button class="button button1">Green</button> -->
             </a>
+            <!-- <hr style="height:2px;border-width:0;color:#0A82EC87;background-color:#0A82EC87"> -->
         </div>
         <dev class="thumbnail">
             <img src="/media/images/{{cook.profile_pic}}" width="100" height="100"  alt="laptop image" class="imgFluid">
@@ -49,7 +51,7 @@
       </section>
       
   </li>
-  <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+  <hr style="height:1px;border-width:0;color:#0a82ec5e;background-color:#0a82ec5e">
   {% endfor %}
 </ul>
 
@@ -70,5 +72,8 @@
     {% endif %}
   </div>
 </section>
-
+<br>
+<br>
+<br>
+<hr style="height:0px;border-width:1px;color:#0A82EC;background-color:#0A82EC">
 {% endblock %}

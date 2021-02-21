@@ -118,3 +118,34 @@ class JobLocationMapping(models.Model):
 
     class Meta:
         db_table = 'job_location_mapping'
+
+
+class User(models.Model):
+    id = models.AutoField(primary_key=True)
+    first_name = models.CharField(max_length=200)
+    middle_name = models.CharField(max_length=200, null=True, blank=True)
+    last_name = models.CharField(max_length=200)
+    email = models.EmailField(max_length=100, null=True, blank=True)
+    phone_number = models.CharField(max_length=10, default='0000000000')
+    password = models.CharField(max_length=500)
+    created_at = models.DateField()
+    class Meta:
+        db_table = 'user'
+
+
+class UserJobMapping(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_id = models.IntegerField()
+    job_id = models.IntegerField()
+
+    class Meta:
+        db_table = 'user_job_mapping'
+
+
+class UserCookMapping(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_id = models.IntegerField()
+    cook_id = models.IntegerField()
+
+    class Meta:
+        db_table = 'user_cook_mapping'

@@ -3,40 +3,34 @@
 {% load static %}
 
 {% block content %}
-
-
-<section class="section">
-  <dev class="thumbnail">
-      <p class="sectionTag text-big">Cooks Job in your area</p>
-  </dev>
-</section>
+<hr style="height:0px;border-width:3px;color:#0A82EC;background-color:#0A82EC">
 
 <section class="section">
   {% if message %}
     <p class="alert alert-success" id="success_message">{{ message }}</p>
   {% endif %}
-
-    <hr style="margin-top: 70px; margin-bottom: auto;">
 </section>
 
+<p class="section sectionTag text-big">Job open in your area</p>
+
+<hr style="height:2px;border-width:0px;color:#0a82ec5e;background-color:#0a82ec5e">
   <ul>
     {% for vacancy in vacancy_list %}
     <li>
       <section class="section">
         <div class="paras">
-            <p class="sectionTag text-big">{{ vacancy.name }}</p><br>
+            <p class="sectionTag text-medium">{{ vacancy.name }}</p><br>
             <p class="sectionSubTag text-small"> <b>Primary Contact number: </b> {{ vacancy.contact_number_one }}</p><br>
             <p class="sectionSubTag text-small">{{ vacancy.descriptions }}</p><br>
             {% for area in vacancy.area %}
             <p class="sectionSubTag text-small"><b>Area: </b> {{ area }}</p><br>
             {% endfor %}
-            <hr>
         </div>
         <!-- <dev class="thumbnail">
             <img src="/media/images/{{vacancy.profile_pic}}" width="100" height="100"  alt="laptop image" class="imgFluid">
         </dev> -->
       </section>
-      
+      <hr style="height:1px;border-width:0;color:#0a82ec5e;background-color:#0a82ec5e">
   </li>
   {% endfor %}
 </ul>
@@ -59,4 +53,8 @@
   </div>
 </section>
 
+<br>
+<br>
+<br>
+<hr style="height:0px;border-width:1px;color:#0A82EC;background-color:#0A82EC">
 {% endblock %}

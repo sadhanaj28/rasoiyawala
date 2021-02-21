@@ -16,16 +16,27 @@
         <li> <a href="{% url 'home_url' %}">Home</a> </li>
         <li> <a href="{% url 'cooklist_url' %}">Find Cook</a> </li>
         <li> <a href="{% url 'cook_job_url' %}">Find Job</a> </li>
-        <li> <a href="/add_cook/">Add Cook</a> </li>
-        <li> <a href="{% url 'add_job_url' %}">Add Job</a> </li>
-        <!-- <li> <a href="{% url 'home_url' %}">Contact Us</a> </li> -->
+        <li>
+          <div class="dropdown-main">
+            <button class="dropbtn">Accounts 
+              <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-sub">
+              <a href="{% url 'user_settings_url' %}">Personal Settings</a>
+              <a href="{% url 'cook_settings_url' %}">Add Cook</a>
+              <a href="{% url 'job_settings_url' %}">Add Vacancy</a>
+            </div>
+          </div> 
     </ul>
     <div class="rightNav v-class-resp">
-      <form action="{% url 'cooklist_url' %}" method="GET">
-        {% csrf_token %}
-        <input type="text" name="search_by" id="search">
-        <button type="submit" class="btn btn-sm"> Search</button>
-      </form>
+      <ul class="nav-list v-class-resp"> 
+        {% if request.session.user_id %}
+        <li> <a href="{% url 'logout_url' %}">Logout</a> </li>
+        {% else %}
+        <li> <a href="{% url 'login_url' %}">Login</a> </li>
+        <li> <a href="{% url 'signup_url' %}">SignUp</a> </li>
+        {% endif %}
+    </ul>
     </div>
     <div class="burger">
         <div class="line"></div>

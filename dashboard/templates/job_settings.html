@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+
+<hr style="height:0px;border-width:3px;color:#0A82EC;background-color:#0A82EC">
+
+<section class="section">
+  {% if message %}
+    <p class="alert alert-success" id="success_message">{{ message }}</p>
+  {% endif %}
+</section>
+
+<a href="{% url 'add_job_url'%}">
+<button id="submit" type="submit" value="Submit" class="btn btn-dark button1">Add New Vacancy</button>
+</a>
+<!-- <hr style="height:0px;border-width:1px;color:#0a82eca9;background-color:#0a82eca9"> -->
+
+<p class="section sectionTag text-big">Your added Vacancy</p>
+<hr style="height:1px;border-width:0;color:#0a82ec5e;background-color:#0a82ec5e">
+<ul>
+  {% for vacancy in vacancy_list %}
+  <li>
+    <section class="section">
+      
+      <div class="paras">
+          <p class="sectionTag text-medium">{{ vacancy.name }}</p><br>
+          <p class="sectionSubTag text-small"> <b>Primary Contact number: </b> {{ vacancy.contact_number_one }}</p><br>
+          <p class="sectionSubTag text-small">{{ vacancy.descriptions }}</p><br>
+          {% for area in vacancy.area %}
+          <p class="sectionSubTag text-small"><b>Area: </b> {{ area }}</p><br>
+          {% endfor %}
+          
+          <hr style="height:2px;border-width:0;color:#0A82EC87;background-color:#0A82EC87">
+      </div>
+      <div class="thumbnail">
+        <a href="{% url 'update_job_url' vacancy.id %}">
+        <button id="submit" type="submit" value="Submit" class="btn btn-dark button1">Update</button>
+        </a>
+        <a href="{% url 'delete_job_url' vacancy.id %}">
+        <button id="submit" type="submit" value="Submit" class="btn btn-dark button1">Delete</button>
+        </a>
+      </div>
+      <hr style="height:1px;border-width:0;color:#0a82ec5e;background-color:#0a82ec5e">
+    </section>
+</li>
+{% endfor %}
+</ul>
+
+<br>
+<br>
+<br>
+<hr style="height:2px;border-width:0;color:#0A82EC87;background-color:#0A82EC87">
+{% endblock %}

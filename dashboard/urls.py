@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
-from .views import CookListView, AddCookView, HomeView, cookDetail, VacancyListView, JobView, CookSettingsView, JobSettingsView, UserSettingsView, LoginView, LogoutView, SignupView, UserUpdateView
+from .views import CookListView, AddCookView, HomeView, cookDetail, VacancyListView, JobView, CookSettingsView, JobSettingsView, UserSettingsView, LoginView, LogoutView, SignupView, UserUpdateView, VacancyUpdateView, VacancyDeleteView
 
 
 urlpatterns = [
@@ -18,6 +18,9 @@ urlpatterns = [
     url(r'^signup', SignupView.as_view(), name="signup_url"),
     url(r'^logout', LogoutView.as_view(), name="logout_url"),
     url(r'^user_update', UserUpdateView.as_view(), name="user_update_url"),
+    # path('job_details/<int:job_id>/', cookDetail, name='job_details_url'),
+    path('update_job/<int:job_id>/', VacancyUpdateView.as_view(), name='update_job_url'),
+    path('delete_job/<int:job_id>/', VacancyDeleteView.as_view(), name='delete_job_url'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

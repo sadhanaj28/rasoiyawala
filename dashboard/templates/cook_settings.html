@@ -1,26 +1,47 @@
 {% extends 'layout.html' %}
 {% load static %}
 {% block content %}
+
+<hr style="height:0px;border-width:3px;color:#0A82EC;background-color:#0A82EC">
+<br>
+<br>
 <a href="{% url 'add_cook_url'%}">
-<button id="submit" type="submit" value="Submit" class="btn btn-dark button1">Add New Cook</button>
+  <button id="submit" type="submit" value="Submit" class="btn btn-dark button1">Add New Cook</button>
 </a>
-<h3>Your have added cooks</h3>
+
+<p class="section sectionTag text-big">Your added cooks</p>
+
+<hr style="height:1px;border-width:0;color:#0a82ec5e;background-color:#0a82ec5e">
 <ul>
+  {% for cookdetails in cook_list %}
     <li>
       <section class="section">
         <div class="paras">
-            <p class="sectionTag text-small">Name: Sadhana</p><br>
-            <p class="sectionSubTag text-small"> Phone: 8898989999</p><br>
-            <p class="sectionSubTag text-small">Email: sadad</p><br>
-            <p class="sectionSubTag text-small">Password: asdasd</p><br>
+          <p class="sectionSubTag text-medium">{{ cookdetails.name }}</p><br>
+          <p class="sectionSubTag text-small" > <b>Gender :</b>  {{ cookdetails.gender }} </p><br>
+          <p class="sectionSubTag text-small"> <b>Primary Contact number: </b> {{ cookdetails.contact_number_one }}</p><br>
+          <p class="sectionSubTag text-small"><b>Secondary Contact number: </b> {{ cookdetails.contact_number_two }}</p><br>
+          <p class="sectionSubTag text-small"><b>North Indian Food: </b> {{ cookdetails.north_indian_food }}</p><br>
+          <p class="sectionSubTag text-small"><b>South Indian Food: </b> {{ cookdetails.south_indian_food }}</p><br>
+          <p class="sectionSubTag text-small"><b>Chinees Food: </b>  {{ cookdetails.chinees_food }}</p><br>
+          <p class="sectionSubTag text-small">{{ cookdetails.descriptions }}</p><br>
+          {% for area in cookdetails.area %}
+          <p class="sectionSubTag text-small"><b>Area: </b> {{ area }}</p><br>
+          {% endfor %}
+        </div>
+        <div class="thumbnail"></div>
             <button id="submit" type="submit" value="Submit" class="btn btn-dark button1">Update</button>
             <button id="submit" type="submit" value="Submit" class="btn btn-dark button1">Delete</button>
             
         </div>
-      </section>
-      
+      </section>  
+      <hr style="height:1px;border-width:0;color:#0a82ec5e;background-color:#0a82ec5e">
   </li>
-  <hr>
+  {% endfor %}
 </ul>
 
+<br>
+<br>
+<br>
+<hr style="height:0px;border-width:1px;color:#0A82EC;background-color:#0A82EC">
 {% endblock %}

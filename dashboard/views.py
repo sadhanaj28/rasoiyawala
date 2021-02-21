@@ -213,7 +213,7 @@ class JobView(View):
             response_data = backend_view.JobView.post(data)
             cook_json_data = response_data 
             
-            if cook_json_data['error_message'] != '':
+            if cook_json_data['error_message'] is not None:
                 return render(request, 'add_jobs.html',
                               context={'error_message': 'Invalid Mobile Number, use unique 10 digit mobile no',
                                        'area_list': location_list})
@@ -222,34 +222,70 @@ class JobView(View):
         return render(request, 'add_jobs.html', context={'message': 'successfully created', 'area_list': location_list})
 
 
-# @login_required
 @method_decorator(csrf_protect, name='dispatch')
 class CookSettingsView(View):
 
     def get(self, request, *args, **kwargs):
-        if request.session.get('is_login', False):
-            user_id = request.session.get('user_id')
-            # user, msg = backend_view.UserView.getById(user_id)
-            user_details = {}
-            return render(request, 'cook_settings.html', context={'user_details': user_details})
-        else:
-            return render(request, 'login.html')
+        data = {}
+        try:
+            if request.session.get('is_login', False):
+                user_id = request.session.get('user_id')
+                data['user_id'] = user_id
+                cook_list = backend_view.cook_list(data)
+                page_details = {
+                    'page': None,
+                    'limit': None,
+                    'count': len(cook_list)
+                }
+                
+                if len(cook_list) == 0:
+                    return render(request, 'cook_settings.html', context={'cook_list': cook_list,
+                                                                    'page_details': page_details,
+                                                                    'message': 'No result'})
+
+                return render(request, 'cook_settings.html', context={'cook_list': cook_list,
+                                                                    'page_details': page_details})
+            else:
+                return render(request, 'login.html')
+        except Exception as e:
+            print(e)
+            return render(request, 'cook_settings.html', context={'cook_list': [],
+                                                                'page_details': {},
+                                                                'message': 'No result'})
 
 
-# @login_required
 @method_decorator(csrf_protect, name='dispatch')
 class JobSettingsView(View):
     def get(self, request, *args, **kwargs):
-        if request.session.get('is_login', False):
-            user_id = request.session.get('user_id')
-            # user, msg = backend_view.UserView.getById(user_id)
-            user_details = {}
-            return render(request, 'job_settings.html', context={'user_details': user_details})
-        else:
-            return render(request, 'login.html')
+        data = {}
+        try:
+            if request.session.get('is_login', False):
+                user_id = request.session.get('user_id')
+                data['user_id'] = user_id
+                vacancy_list = backend_view.vacancy_list(data)
+                page_details = {
+                    'page': None,
+                    'limit': None,
+                    'count': len(vacancy_list)
+                }
+                
+                if len(vacancy_list) == 0:
+                    return render(request, 'job_settings.html', context={'vacancy_list': vacancy_list,
+                                                                    'page_details': page_details,
+                                                                    'message': 'No result'})
+
+                return render(request, 'job_settings.html', context={'vacancy_list': vacancy_list,
+                                                                    'page_details': page_details})
+            else:
+                return render(request, 'login.html')
+        except Exception as e:
+            print(e)
+            return render(request, 'job_settings.html', context={'vacancy_list': [],
+                                                                'page_details': {},
+                                                                'message': 'No result'})
 
 
-# @login_required
+
 @method_decorator(csrf_protect, name='dispatch')
 class UserSettingsView(View):
     def get(self, request, *args, **kwargs):
@@ -349,4 +385,64 @@ class UserUpdateView(View):
         return render(request, 'personal_settings.html',
                               context={'user_details': user_details, 'message': succes_msg})
 
-        
+@method_decorator(csrf_protect, name='dispatch')
+class VacancyUpdateView(View):
+
+    def get(self, request, *args, **kwargs):
+        job_id = kwargs.get('job_id', None)
+        data = {}
+        data['job_id'] = job_id
+        vacancy_list = backend_view.vacancy_list(data)
+        vacancy_details = vacancy_list[0]
+        area_list = backend_view.get_area_list() 
+        return render(request, 'update_vacancy.html', context={'vacancy_details': vacancy_details, 'area_list':area_list})
+
+    def post(self, request, *args, **kwargs):
+        job_id = request.POST.get('job_id')
+        user_id = None
+        if request.session.get('is_login', False):
+            user_id = request.session.get('user_id')
+
+        job_details = {'name': request.POST.get('name'),
+                        'id': request.POST.get('job_id'),
+                        'phone_number': request.POST.get('primary_contact_number'),
+                        'descriptions': request.POST.get('description')
+                        }
+
+        area_list = request.POST.getlist('area')
+        location = list()
+        for area in area_list:
+            area_dic = {'area': area}
+            location.append(area_dic)
+
+        data = {'job_details': job_details,
+                'location': location,
+                'user_id':user_id,
+                'job_id':job_id}
+        headers = {"content-type": "application/json"}
+        location_list = backend_view.get_area_list() 
+        try:
+            success_msg, error_msg = backend_view.JobView.updateJobDetails(data) 
+            if error_msg is not None:
+                return render(request, 'update_vacancy.html',
+                              context={'error_message': error_msg,
+                                       'area_list': location_list})
+        except Exception as e:
+            return render(request, 'update_vacancy.html', context={'error_message': str(e), 'area_list': location_list})
+        return render(request, 'job_settings.html', context={'message': success_msg, 'area_list': location_list})
+
+ 
+@method_decorator(csrf_protect, name='dispatch')
+class VacancyDeleteView(View):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            job_id = kwargs.get('job_id', None)
+            success_msg, error_msg = backend_view.JobView.deleteJob(job_id) 
+            if error_msg is not None:
+                return render(request, 'job_settings.html',
+                              context={'error_message': error_msg})
+        except Exception as e:
+            return render(request, 'job_settings.html', context={'error_message': str(e)})
+        return render(request, 'job_settings.html', context={'message': success_msg})
+

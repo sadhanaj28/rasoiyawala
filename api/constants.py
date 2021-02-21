@@ -12,5 +12,7 @@ user_id = 'id'
 update_msg = 'Successfully updated'
 invalid_credential = 'invalid credential'
 success_msg = 'success'
+create_msg = 'Successfully created'
+delete_msg = 'Successfully deleted'
 
 data = 'data'

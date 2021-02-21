@@ -1,9 +1,13 @@
 {% extends 'layout.html' %}
 {% load static %}
 {% block content %}
-
+<hr style="height:0px;border-width:3px;color:#0A82EC;background-color:#0A82EC">
+<br>
+<br>
+<p class="section sectionTag text-big">Login Form</p>
 <section class="contact" id="contact">
-    <h2 class="text-center">Login Form</h2>
+    <hr style="height:1px;border-width:0;color:#0a82ec5e;background-color:#0a82ec5e">
+    
     {% if error_message %}
         <p class="alert alert-danger" id="error_message">{{ error_message }}</p>
     {% endif %}
@@ -16,6 +20,12 @@
         </form>
         <br><br>
     </div>
+    <hr style="height:1px;border-width:0;color:#0a82ec5e;background-color:#0a82ec5e">
 </section>
+
+<br>
+<br>
+<br>
+<hr style="height:0px;border-width:1px;color:#0A82EC;background-color:#0A82EC">
 
 {% endblock %}

@@ -2,36 +2,17 @@
 {% load static %}
 {% block content %}
 
+<hr style="height:0px;border-width:3px;color:#0A82EC;background-color:#0A82EC">
+
 <section class="section">
   {% if message %}
     <p class="alert alert-success" id="success_message">{{ message }}</p>
   {% endif %}
-
-    <hr style="margin-top: 70px; margin-bottom: auto;">
 </section>
-
-<!-- <ul>
-    <li>
-      <section class="section">
-        <div class="paras">
-            <p class="sectionTag text-small">First Name: {{ user_details.first_name }}</p><br>
-            <p class="sectionTag text-small">Middle Name: {{ user_details.middle_name }}</p><br>
-            <p class="sectionTag text-small">Last Name: {{ user_details.last_name }}</p><br>
-            <p class="sectionSubTag text-small"> Phone: {{ user_details.phone_number }}</p><br>
-            <p class="sectionSubTag text-small">Email: {{ user_details.email }}</p><br>
-            <a href="{% url 'user_update_url' %}">
-            <button type="submit" class="btn btn-dark button1">Change</button>
-            </a>
-            
-        </div>
-      </section>
-      
-  </li>
-  <hr>
-</ul> -->
+<p class="section sectionTag text-big">Personal Details</p>
 
 <section class="contact" id="contact">
-  <h2 class="text-center">Personal Details</h2>
+  <hr style="height:1px;border-width:0;color:#0a82ec5e;background-color:#0a82ec5e">
   {% if error_message %}
       <p class="alert alert-danger" id="error_message">{{ error_message }}</p>
   {% endif %}
@@ -44,9 +25,12 @@
     <a href="{% url 'user_update_url' %}">
     <button type="submit" class="btn btn-dark button1">Change</button>
     </a>
-      <br><br>
   </div>
+  <hr style="height:1px;border-width:0;color:#0a82ec5e;background-color:#0a82ec5e">
 </section>
 
-
+<br>
+<br>
+<br>
+<hr style="height:0px;border-width:1px;color:#0A82EC;background-color:#0A82EC">
 {% endblock %}

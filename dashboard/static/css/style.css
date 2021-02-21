@@ -111,17 +111,19 @@ html{
 }
 
 .text-big{
-    font-size: 41px;
+    font-size: 30px;
+    text-align: center;
+    color: darkblue;
 }
 
 .text-medium{
-    font-size: 26px;
+    font-size: 22px;
     text-align: center;
     color: darkblue;
 }
 
 .text-small{
-    font-size:18px;
+    font-size:16px;
 }
 
 .text-yellow-small{
@@ -180,7 +182,7 @@ html{
 }
 
 .thumbnail img{
-    border:2px solid black;
+    border:2px solid #0A82EC;
     border-radius: 26px;
     margin-top: 0px;
 }
@@ -206,7 +208,7 @@ html{
     padding: 5px 3px;
     width: 100%;
     font-size: 19px;
-    border: 2px solid gray;
+    border: 2px solid #0A82EC;
     border-radius: 6px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -240,7 +242,7 @@ html{
     margin:7px 3px;
     border:2px solid white;
     border-radius: 8px;
-    background: none;
+    background: None;
     color: white;
     cursor: pointer;
     font-family: 'Ubuntu', sans-serif ;
@@ -312,11 +314,11 @@ html{
   .button1 {
     background-color: white; 
     color: black; 
-    border: 2px solid #0000b3;
+    border: 2px solid #0A82EC;
   }
   
   .button1:hover {
-    background-color: #0000b3;
+    background-color: #0A82EC;
     color: white;
   }
 
